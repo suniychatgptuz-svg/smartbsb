@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Natijalar jadvali — smartbsb.uz</title>
+<style>
+:root{--bg:#0b0b1f;--card:#14142e;--line:#26264a;--txt:#ecebff;--mut:#9d9bc7;--a:#8b5cf6;--b:#ec4899;--pdf:#f43f5e;--xl:#22c55e;--bsb:#7c6cff;--chsb:#38bdf8;--dg:#f59e0b}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,#2e1f78 0,transparent 60%),radial-gradient(900px 500px at 110% 0,#5b1647 0,transparent 55%),var(--bg);color:var(--txt);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.w{max-width:1150px;margin:0 auto;padding:24px 16px 60px}
+h1{margin:0;font-size:26px;letter-spacing:-.5px}
+h1 b{background:linear-gradient(90deg,#c4b5fd,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:0 0 14px;font-size:17px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.mut{color:var(--mut);font-size:13px}
+button,input,select{font:inherit;color:var(--txt);background:#1c1c3c;border:1px solid var(--line);border-radius:10px;padding:9px 14px}
+input,select{width:100%}
+button{cursor:pointer;background:linear-gradient(135deg,var(--a),var(--b));border:0;font-weight:700;white-space:nowrap}
+button.g{background:#1c1c3c;border:1px solid var(--line);font-weight:600}
+button.g.on{border-color:var(--a);background:#2a2357}
+button.sm{padding:6px 10px;font-size:13px}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+label{display:block;font-size:13px;color:var(--mut);font-weight:600}
+label input,label select{margin-top:5px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.g4 .w2{grid-column:span 2}
+@media(max-width:700px){.g4{grid-template-columns:1fr 1fr}}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:26px;border:2px dashed var(--line);border-radius:14px;cursor:pointer;text-align:center;color:var(--txt)}
+.drop.ov,.drop:hover{border-color:var(--a);background:#1a1740}
+.err{color:#fb7185;font-size:14px;margin-top:8px}
+.hide{display:none!important}
+.jh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.cols{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ct{display:flex;flex-direction:column;gap:3px;background:#1c1c3c;border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.ct select{padding:4px 8px;font-size:13px;width:auto}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--mut);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.pv th,.pv td{text-align:center;border:1px solid #2f2f55}
+.pv td.nm{text-align:left}
+.pv tr.gr5 td{background:#92D050;color:#10240a}.pv tr.gr4 td{background:#B7DEE8;color:#0b2a36}.pv tr.gr3 td{background:#FFFF00;color:#333300}.pv tr.gr2 td{background:#F4B084;color:#3d1a06}
+.bar2{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;bottom:10px;border-color:var(--a)}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.kp .card{padding:16px;margin:0}
+.kp .n{font-size:32px;font-weight:800;letter-spacing:-1px;margin-top:4px}
+.kp .l{color:var(--mut);font-size:13px;font-weight:600}
+.row2{display:grid;grid-template-columns:1fr 1.6fr;gap:14px}
+@media(max-width:800px){.row2{grid-template-columns:1fr}}
+.bar{display:flex;align-items:center;gap:10px;margin:10px 0}
+.bar .nm{width:96px;font-weight:600}
+.bar .tr{flex:1;height:22px;background:#1c1c3c;border-radius:6px;overflow:hidden;display:flex}
+.bar .tr i{display:block;height:100%}
+.bar .v{width:52px;text-align:right;font-weight:700}
+.lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--mut)}
+.lg span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
+.ch{display:flex;align-items:flex-end;gap:3px;height:180px;border-bottom:1px solid var(--line)}
+.ch div{flex:1;min-width:3px;display:flex;flex-direction:column-reverse;position:relative;height:100%}
+.ch div i{display:block;width:100%}
+.ch div:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#000;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;z-index:2}
+.ax{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:6px}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;background:#24244a;font-size:12px;margin-right:4px}
+.lock{max-width:420px;margin:12vh auto 0;text-align:center}
+.lock #tgw{min-height:48px;margin:18px 0 6px}
+.idbox{font:700 26px/1.2 ui-monospace,Consolas,monospace;letter-spacing:1px;background:#1c1c3c;border:1px solid var(--a);border-radius:10px;padding:10px;margin:10px 0;user-select:all}
+.lock input{text-align:center;margin:14px 0 10px}
+.lock button{width:100%}
+a{color:#c4b5fd}
+a.btnl{display:inline-block;text-decoration:none;color:var(--txt);background:#1c1c3c;border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-weight:600}
+button.dn{color:#fda4af}
+code{font:600 14px ui-monospace,Consolas,monospace;letter-spacing:.5px}
+code.big{font-size:16px;color:#fff}
+.steps{text-align:left;margin:14px 0 0;padding-left:20px;line-height:1.7;color:var(--mut);font-size:14px}
+.codein{font:700 22px ui-monospace,Consolas,monospace!important;letter-spacing:2px;text-transform:uppercase}
+.ok{color:#4ade80;font-size:14px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="w">
+  <div id="lock" class="card lock">
+    <h1><b>Natijalar</b> jadvali</h1>
+    <p class="mut">eMaktab jurnal faylidan chorak / yarim yillik natijalarining tayyor rangli Excel jadvali — bir necha soniyada.</p>
+    <div id="sIn">
+      <p class="mut" style="margin:18px 0 6px">Kirish uchun Telegram tugmasini bosing:</p>
+      <div id="tgw" style="min-height:48px"></div>
+      <p class="mut" style="margin:12px auto 0;max-width:340px;font-size:12.5px;line-height:1.5;padding:9px 12px;border-radius:10px;background:rgba(253,224,71,.08);border:1px solid rgba(253,224,71,.25)">🔒 Telegram so‘rovida <b>smartbsb.uz</b> yozilganini tekshiring. Biz hech qachon SMS kod, parol yoki QR kod so‘ramaymiz.</p>
+    </div>
+    <div id="sCode" class="hide">
+      <p id="hi" style="margin:16px 0 0"></p>
+      <input id="code" class="codein" placeholder="NJ-XXXX-XXXX" maxlength="14" autocomplete="off">
+      <button id="act">Faollashtirish</button>
+      <ol class="steps">
+        <li>Kod olish uchun <a href="https://t.me/volumes_analysis" target="_blank" rel="noopener">@volumes_analysis</a> ga yozing.</li>
+        <li>To'lovdan keyin sizga kod yuboriladi.</li>
+        <li>Kodni shu yerga kiriting — bo'lim darhol ochiladi.</li>
+      </ol>
+      <p class="mut" style="margin-top:14px"><a href="#" id="sw">Boshqa Telegram akkaunt bilan kirish</a></p>
+    </div>
+    <div id="msg" class="err"></div>
+    <p class="mut" style="margin-top:16px">Kira olmayapsizmi? <a href="https://t.me/volumes_analysis" target="_blank" rel="noopener">@volumes_analysis</a> ga yozing. · <a href="/">Asosiy sayt</a></p>
+  </div>
+  <div id="app"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" integrity="sha512-dlPw+ytv/6JyepmelABrgeYgHI0O+frEwgfnPdXDTOIZz+eDgfW07QXG02/O8COfivBdGNINy+Vex+lYmJ5rxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+const $=id=>document.getElementById(id);
+const FN='/.netlify/functions/';
+const BOT='BSBCHSBUZ_bot';
+const T={get:()=>{try{return localStorage.getItem('ntok')||''}catch(e){return''}},set:v=>{try{v?localStorage.setItem('ntok',v):localStorage.removeItem('ntok')}catch(e){}}};
+const OY=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+const uzDate=iso=>{const d=new Date(Date.parse(iso)+5*3600e3);return d.getUTCDate()+'-'+OY[d.getUTCMonth()]+' '+d.getUTCFullYear()};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ME={};
+function say(text,ok){$('msg').className=ok?'ok':'err';$('msg').textContent=text||''}
+function view(v,msg){
+  $('app').innerHTML='';$('lock').classList.remove('hide');
+  $('sIn').classList.toggle('hide',v!=='in');$('sCode').classList.toggle('hide',v!=='code');
+  say(msg);
+  if(v==='in'&&!$('tgw').firstChild){const s=document.createElement('script');s.async=true;s.src='https://telegram.org/js/telegram-widget.js?22';
+    s.setAttribute('data-telegram-login',BOT);s.setAttribute('data-size','large');s.setAttribute('data-userpic','false');s.setAttribute('data-auth-url',location.origin+location.pathname);$('tgw').appendChild(s)}
+  if(v==='code'){
+    const ended=ME.until&&Date.parse(ME.until)<=Date.now();
+    $('hi').innerHTML='Salom, <b>'+esc(ME.name||'')+'</b>! '+(ended?'Obunangiz muddati tugagan. Yangi kodni kiriting:':'Obuna kodingizni kiriting:');
+    setTimeout(()=>$('code').focus(),50);
+  }
+}
+async function api(part,body){
+  const o={headers:{Authorization:'Bearer '+T.get()},cache:'no-store'};
+  if(body){o.method='POST';o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}
+  const r=await fetch(FN+'nj-api?part='+part,o);
+  if(r.status===401){T.set('');view('in','Qayta kiring.');throw new Error('auth')}
+  if(part==='app')return r.ok?r.text():null;
+  return r.json();
+}
+window.onTelegramAuth=async user=>{
+  say('Tekshirilmoqda...',true);
+  try{
+    const r=await fetch(FN+'nj-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user})});
+    const j=await r.json().catch(()=>({}));
+    if(!j.ok){view('in',"Telegram tasdig'i o'tmadi. Qayta urinib ko'ring.");return}
+    T.set(j.token);start();
+  }catch(e){view('in','Aloqa xatosi. Internetni tekshiring.')}
+};
+async function start(){
+  if(!T.get()){view('in');return}
+  let s;try{s=await api('status')}catch(e){if(e.message!=='auth')view('in','Aloqa xatosi. Sahifani yangilang.');return}
+  ME=s;
+  if(!s.active){view('code');return}
+  let code;try{code=await api('app')}catch(e){return}
+  if(!code){view('code');return}
+  $('lock').classList.add('hide');
+  window.ADMIN={root:$('app'),mode:'nj',api,name:s.name,until:s.until,
+    logout:()=>{T.set('');view('in','Chiqdingiz.')},
+    onDownload:()=>{try{let did=localStorage.getItem('did');if(!did){did=(Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24);localStorage.setItem('did',did)}
+      fetch(FN+'track',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({did,fmt:'excel',mode:'nj',kind:'jadval'})}).catch(()=>{})}catch(e){}}};
+  const el=document.createElement('script');el.textContent=code;document.body.appendChild(el);
+}
+$('act').onclick=async()=>{
+  const c=$('code').value.trim();
+  if(c.replace(/[^a-z0-9]/gi,'').length<6){say('Kodni to‘liq kiriting');return}
+  $('act').disabled=true;say('Tekshirilmoqda...',true);
+  let r;try{r=await api('activate',{code:c})}catch(e){$('act').disabled=false;if(e.message!=='auth')say('Aloqa xatosi');return}
+  $('act').disabled=false;
+  if(r.ok){say('Faollashtirildi! '+uzDate(r.until)+' gacha.',true);setTimeout(start,700);return}
+  say({bad_code:'Bunday kod topilmadi. Kodni tekshirib qayta kiriting.',taken:'Bu kod boshqa foydalanuvchiga tegishli. Kod olish uchun @volumes_analysis ga yozing.',expired:'Bu kodning muddati tugagan. Yangi kod oling.'}[r.reason]||'Faollashtirib bo‘lmadi');
+};
+$('code').onkeydown=e=>{if(e.key==='Enter')$('act').onclick()};
+$('sw').onclick=e=>{e.preventDefault();T.set('');view('in')};
+/* Telegram kirishdan qaytganda ma'lumot manzil orqali keladi (data-auth-url). Kodni matndan ishga tushirish
+   (eval) kerak bo'lmaydi, shuning uchun xavfsizlik qoidasi (CSP) qattiq qoladi. Faqat Telegram maydonlari olinadi. */
+(function(){const q=new URLSearchParams(location.search);
+  if(!q.get('hash')||!q.get('id')){start();return}
+  const u={};['id','first_name','last_name','username','photo_url','auth_date','hash'].forEach(k=>{if(q.has(k))u[k]=q.get(k)});
+  history.replaceState(null,'',location.pathname);
+  onTelegramAuth(u);
+})();
+</script>
+</body>
+</html>

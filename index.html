@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>/* oldin ishlagan o'qituvchi to'g'ridan-to'g'ri kabinetga o'tadi (?bosh bo'lsa bu sahifa ochiladi) */try{if(localStorage.getItem('bsb_chsb_v1')&&!/[?&]bosh/.test(location.search))location.replace('/kabinet.html')}catch(e){}</script>
+<link rel="icon" href="logo-96.png">
+<title>smartbsb.uz — BSB va CHSB hisobotlari</title>
+<meta name="description" content="O‘qituvchilar uchun BSB, CHSB va Diagnostika hisobotlarini avtomatik tayyorlaydigan sayt. eMaktab jurnalini tashlang — hisobot tayyor.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--y:#fde047;--yd:#eab308;--ind:#4f46e5;--deep:#22106e;--night:#160a52;--ink:#16123a;--gray:#8a87a6;--mut:#5d5a78;--bg:#f5f4fd;--line:#ecebf3;--ok:#16a34a;--bad:#e11d48;--sh:0 14px 34px -22px rgba(34,16,110,.35)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+svg{display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.mono{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+.sp{flex:1}
+.u{position:relative;display:inline-block;white-space:nowrap}
+.u{padding-bottom:.06em}
+.u:after{content:"";position:absolute;left:-2%;right:-2%;bottom:-.2em;height:.2em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 70 3, 190 2, 297 8' fill='none' stroke='%23fde047' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat;transform:scaleX(var(--ux,1));transform-origin:left;transition:transform .5s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+
+/* icon tiles (same as kabinet) */
+.ti{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;color:#fff;flex-shrink:0;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),inset 0 -2.5px 0 rgba(0,0,0,.15),0 10px 20px -8px var(--s)}
+.ti:before{content:"";position:absolute;inset:1.5px 1.5px 50% 1.5px;border-radius:12px 12px 40% 40%;background:linear-gradient(180deg,rgba(255,255,255,.36),rgba(255,255,255,0));pointer-events:none}
+.ti svg{position:relative;width:52%;height:52%}
+.ti.sm{width:30px;height:30px;border-radius:10px}.ti.sm:before{border-radius:9px 9px 40% 40%}
+.c-bsb{--c1:#7b6cff;--c2:#4338ca;--s:rgba(67,56,202,.55)}.c-chsb{--c1:#b46cff;--c2:#6d28d9;--s:rgba(109,40,217,.5)}.c-dg{--c1:#3ee0a1;--c2:#059669;--s:rgba(5,150,105,.45)}
+.c-nj{--c1:#ffec6e;--c2:#f5a50b;--s:rgba(245,165,11,.55);color:#2a1580}.c-cls{--c1:#4cc8ff;--c2:#0277c9;--s:rgba(2,119,201,.45)}.c-pdf{--c1:#ff7a8e;--c2:#e11d48;--s:rgba(225,29,72,.45)}
+.c-xls{--c1:#4be38a;--c2:#15803d;--s:rgba(21,128,61,.45)}.c-or{--c1:#ffc53d;--c2:#ea6a0c;--s:rgba(234,106,12,.45)}.c-tg{--c1:#5fc8ff;--c2:#1d8fe0;--s:rgba(29,143,224,.45)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:13px;font-weight:800;font-size:15px;white-space:nowrap;letter-spacing:-.01em;transition:background .15s,box-shadow .15s,transform .12s}
+.btn:active{transform:scale(.98)}
+.btn svg{width:17px;height:17px}
+.btn.y{background:var(--y);color:var(--deep);box-shadow:0 1px 2px rgba(120,90,0,.2),0 12px 24px -12px rgba(250,204,21,.9)}.btn.y:hover{background:#facc15}
+.btn.p{background:var(--ind);color:#fff;box-shadow:0 12px 24px -12px rgba(79,70,229,.9)}.btn.p:hover{background:#4338ca}
+.btn.glass{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22)}.btn.glass:hover{background:rgba(255,255,255,.17)}
+.btn.g{background:#fff;color:var(--ink);border:1.5px solid var(--line)}.btn.g:hover{border-color:#d9d6f3}
+.btn.sm{height:38px;padding:0 14px;font-size:13.5px;border-radius:11px}
+
+/* ===== header ===== */
+.hd{position:fixed;left:0;right:0;top:0;z-index:50;transition:background .25s,box-shadow .25s,border-color .25s;border-bottom:1px solid transparent}
+.hd .wrap{display:flex;align-items:center;gap:28px;height:68px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:21px;letter-spacing:-.035em;color:#fff}
+.logo img{width:42px;height:42px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.14),0 6px 16px -4px rgba(124,108,255,.8)}
+.logo b{color:var(--y);font-weight:900}.logo i{font-style:normal;color:rgba(255,255,255,.45);font-weight:700}
+.nav{display:flex;gap:4px}
+.nav a{padding:8px 12px;border-radius:10px;font-weight:600;font-size:14px;color:rgba(255,255,255,.75);transition:color .15s,background .15s}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.hd.solid{background:rgba(22,10,82,.92);backdrop-filter:blur(14px);border-color:rgba(255,255,255,.08);box-shadow:0 10px 30px -18px rgba(0,0,0,.6)}
+
+/* ===== hero ===== */
+.hero{position:relative;background:var(--night);color:#fff;overflow:hidden;padding:128px 0 0}
+.blob{position:absolute;border-radius:50%;filter:blur(40px);pointer-events:none}
+.b1{width:900px;height:900px;right:-320px;top:-460px;background:radial-gradient(circle,rgba(124,108,255,.9),rgba(92,72,240,.35) 45%,transparent 70%);animation:dr1 18s ease-in-out infinite alternate}
+.b2{width:760px;height:760px;left:-380px;bottom:-380px;background:radial-gradient(circle,rgba(79,70,229,.75),transparent 70%);animation:dr2 22s ease-in-out infinite alternate}
+.b3{width:520px;height:520px;left:38%;top:24%;background:radial-gradient(circle,rgba(168,85,247,.32),transparent 70%);animation:dr1 26s ease-in-out infinite alternate-reverse}
+@keyframes dr1{to{transform:translate(-60px,40px) scale(1.06)}}@keyframes dr2{to{transform:translate(70px,-30px) scale(1.08)}}
+.grain{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(180deg,#000,transparent 75%);pointer-events:none}
+.hg{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-weight:600;font-size:13px;color:rgba(255,255,255,.85)}
+.tag b{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.14em;background:var(--y);color:var(--deep);border-radius:99px;padding:3px 9px}
+h1{font-size:64px;font-weight:800;letter-spacing:-.05em;line-height:1.06;margin:22px 0 26px;min-height:2.12em}
+h1 .ln{display:block}
+h1 .sw{display:inline-block;transition:opacity .45s,transform .45s,filter .45s}
+h1 .sw.out{opacity:0;transform:translateY(14px);filter:blur(8px)}
+.lead{font-size:18px;color:rgba(255,255,255,.72);font-weight:500;max-width:520px}
+.ctas{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.ctas .btn{height:52px;padding:0 24px;font-size:16px}
+.fine{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+.fine span{display:flex;align-items:center;gap:6px}.fine svg{width:15px;height:15px;color:#86efac}
+
+/* product mock */
+.mock{position:relative;padding:20px 0 0}
+.win{position:relative;border-radius:20px;background:#fff;color:var(--ink);box-shadow:0 50px 90px -30px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.12);overflow:hidden;transform:perspective(1600px) rotateY(-9deg) rotateX(4deg);transform-origin:left center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.mock:hover .win{transform:perspective(1600px) rotateY(-4deg) rotateX(2deg)}
+.wbar{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;background:#f3f2fb;border-bottom:1px solid var(--line)}
+.wbar i{width:10px;height:10px;border-radius:50%;background:#e3e1f0}
+.wbar span{margin-left:10px;height:20px;flex:1;max-width:240px;border-radius:6px;background:#fff;border:1px solid var(--line);font-size:10.5px;font-weight:600;color:var(--gray);display:flex;align-items:center;padding:0 8px}
+.wbody{display:grid;grid-template-columns:118px minmax(0,1fr)}
+.wside{background:var(--night);padding:12px 8px;display:flex;flex-direction:column;gap:3px}
+.wside b{display:flex;align-items:center;gap:6px;height:24px;padding:0 7px;border-radius:7px;font-size:10px;font-weight:600;color:rgba(255,255,255,.62)}
+.wside b svg{width:11px;height:11px}
+.wside b.on{background:rgba(255,255,255,.14);color:#fff}.wside b.on svg{color:var(--y)}
+.wmain{padding:12px 14px 14px}
+.wh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.wh h4{font-size:13px;font-weight:800}.wh small{font-size:9.5px;color:var(--gray);font-weight:600;display:block}
+.wh .pill{margin-left:auto;font-family:'JetBrains Mono';font-size:8px;font-weight:700;letter-spacing:.1em;background:#eeedff;color:var(--ind);padding:3px 7px;border-radius:99px}
+.mt{width:100%;border-collapse:collapse;font-size:10px}
+.mt th{font-family:'JetBrains Mono';font-weight:700;font-size:7.5px;letter-spacing:.12em;padding:4px 2px;text-align:center}
+.mt td{padding:3px 2px;text-align:center;border-top:1px solid var(--line);font-weight:700}
+.mt td.n{text-align:left;font-weight:700;white-space:nowrap;padding-left:4px}
+.mt .k{display:inline-flex;width:15px;height:15px;border-radius:5px;align-items:center;justify-content:center;background:linear-gradient(180deg,#7d6fff,#4338ca);color:#fff}
+.mt .k.x{background:#fff1f2;color:var(--bad);border:1px solid #fecdd3}
+.mt .k svg{width:9px;height:9px}
+.mt .gj{font-weight:800}
+.mt .bd{display:inline-block;min-width:30px;border-radius:99px;padding:1px 5px;font-size:9px;font-weight:800}
+.fl{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:16px;background:#fff;color:var(--ink);box-shadow:0 24px 44px -18px rgba(0,0,0,.55);font-size:12.5px;font-weight:600;animation:bob 5s ease-in-out infinite}
+.fl b{display:block;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.fl.f1{left:-30px;bottom:-30px}.fl.f2{right:-18px;top:-6px;animation-delay:-1.6s}.fl.f3{right:-14px;bottom:-30px;animation-delay:-3.2s}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.hero-foot{position:relative;height:130px;margin-top:-10px}
+.hero-foot:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:#fff;border-radius:50% 50% 0 0/100% 100% 0 0}
+
+/* ===== sections ===== */
+section{padding:96px 0}
+.sh{text-align:center;max-width:680px;margin:0 auto 52px}
+.sh .mono{color:var(--ind)}
+.sh h2{font-size:42px;font-weight:800;letter-spacing:-.04em;line-height:1.1;margin:12px 0 14px}
+.sh p{color:var(--mut);font-size:17px;font-weight:500}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+/* strip */
+.strip{padding:12px 0 40px}
+.sg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.si{display:flex;align-items:center;gap:12px;padding:16px;border-radius:18px;background:var(--bg);border:1px solid var(--line)}
+.si b{display:block;font-size:15px;font-weight:800;letter-spacing:-.01em}.si div span{font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* features */
+.fg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.fc{position:relative;padding:24px;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);transition:transform .2s,box-shadow .2s,border-color .2s;overflow:hidden}
+.fc:hover{transform:translateY(-4px);border-color:#dcd9f5;box-shadow:0 26px 46px -26px rgba(34,16,110,.5)}
+.fc h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:16px 0 8px}
+.fc p{color:var(--mut);font-weight:500;font-size:14.5px}
+.fc ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:7px}
+.fc li{display:flex;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.fc li svg{width:16px;height:16px;color:var(--ok);flex-shrink:0;margin-top:2px}
+.fc .pill{position:absolute;right:18px;top:20px;font-family:'JetBrains Mono';font-size:9.5px;font-weight:700;letter-spacing:.12em;padding:4px 9px;border-radius:99px;background:var(--y);color:var(--deep)}
+.fc.wide{grid-column:span 2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center;background:linear-gradient(160deg,#fff,#faf9ff)}
+
+/* steps */
+.steps{background:var(--bg)}
+.stg{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.stg:before{content:"";position:absolute;left:12%;right:12%;top:31px;height:2px;background:repeating-linear-gradient(90deg,#cfcdea 0 8px,transparent 8px 16px)}
+.st{position:relative;text-align:center;padding:0 8px}
+.st .num{position:relative;width:62px;height:62px;margin:0 auto 18px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);display:flex;align-items:center;justify-content:center}
+.st .num .ti{width:42px;height:42px}
+.st .num em{position:absolute;right:-8px;top:-8px;width:24px;height:24px;border-radius:50%;background:var(--y);color:var(--deep);font-style:normal;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--bg)}
+.st h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.st p{font-size:14px;color:var(--mut);font-weight:500}
+
+/* pricing */
+.pg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.pc{position:relative;display:flex;flex-direction:column;padding:26px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.pc h4{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.16em;color:var(--gray);font-weight:700}
+.pc .big{font-size:44px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:14px 0 4px}
+.pc .big small{font-size:16px;font-weight:700;color:var(--gray);letter-spacing:-.01em;margin-left:6px}
+.pc .sub{font-size:14px;color:var(--mut);font-weight:600}
+.pc ul{list-style:none;margin:20px 0 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pc li{display:flex;gap:9px;font-size:14px;font-weight:600}
+.pc li svg{width:17px;height:17px;color:var(--ok);flex-shrink:0;margin-top:2px}
+.pc li.no{color:var(--gray)}.pc li.no svg{color:#c9c6de}
+.pc.best{background:var(--night);color:#fff;border-color:transparent;box-shadow:0 40px 70px -34px rgba(22,10,82,.8);overflow:hidden}
+.pc.best:before{content:"";position:absolute;width:380px;height:380px;right:-170px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(124,108,255,.9),transparent 68%);filter:blur(16px)}
+.pc.best>*{position:relative}
+.pc.best h4,.pc.best .big small{color:rgba(255,255,255,.6)}.pc.best .sub{color:rgba(255,255,255,.7)}
+.pc.best li svg{color:var(--y)}
+.pc .rib{position:absolute;right:20px;top:22px;font-family:'JetBrains Mono';font-size:9.5px;font-weight:700;letter-spacing:.12em;padding:4px 9px;border-radius:99px;background:var(--y);color:var(--deep)}
+.pg.pg2c{grid-template-columns:repeat(2,minmax(0,1fr));max-width:820px;margin:0 auto}
+@media(max-width:820px){.pg.pg2c{grid-template-columns:minmax(0,1fr)}}
+.pnote{text-align:center;margin-top:22px;color:var(--gray);font-size:13.5px;font-weight:600}
+
+/* faq */
+.fq{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.fq details{border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 0 rgba(34,16,110,.03);transition:border-color .15s,box-shadow .15s}
+.fq details[open]{border-color:#dcd9f5;box-shadow:var(--sh)}
+.fq summary{list-style:none;display:flex;align-items:center;gap:12px;padding:18px 20px;font-weight:700;font-size:15.5px;cursor:pointer}
+.fq summary::-webkit-details-marker{display:none}
+.fq summary .pm{margin-left:auto;width:28px;height:28px;border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ind);flex-shrink:0;transition:transform .2s}
+.fq summary .pm svg{width:15px;height:15px}
+.fq details[open] .pm{transform:rotate(45deg)}
+.fq details p{padding:0 20px 18px;color:var(--mut);font-weight:500;font-size:14.5px}
+
+/* final cta */
+.cta{padding:0 0 96px}
+.cbox{position:relative;overflow:hidden;border-radius:30px;background:var(--night);color:#fff;padding:56px;display:grid;grid-template-columns:minmax(0,1.4fr) auto;gap:30px;align-items:center}
+.cbox:before{content:"";position:absolute;width:620px;height:620px;right:-200px;top:-320px;border-radius:50%;background:radial-gradient(circle,rgba(124,108,255,.9),transparent 68%);filter:blur(24px)}
+.cbox:after{content:"";position:absolute;width:420px;height:420px;left:-200px;bottom:-260px;border-radius:50%;background:radial-gradient(circle,rgba(250,204,21,.25),transparent 70%);filter:blur(24px)}
+.cbox>*{position:relative;z-index:1}
+.cbox h2{font-size:38px;font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.cbox p{color:rgba(255,255,255,.7);font-size:16px;font-weight:500;margin-top:10px;max-width:520px}
+.cbox .ctas{margin-top:0;flex-direction:column;align-items:stretch}
+
+/* footer */
+.ft{background:var(--night);color:rgba(255,255,255,.7);padding:44px 0 30px}
+.ft .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ft .soc{display:flex;gap:10px}
+.ft .soc a{display:flex;align-items:center;gap:9px;height:40px;padding:0 14px 0 6px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-weight:700;font-size:13.5px;color:#fff;transition:background .15s}
+.ft .soc a:hover{background:rgba(255,255,255,.13)}
+.ft .soc .ti{width:28px;height:28px;border-radius:9px}
+.ft .soc{flex-wrap:wrap}.ft .soc .bl{width:28px;height:28px;flex-shrink:0;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
+.ft .links{display:flex;gap:18px;font-size:13.5px;font-weight:600}
+.ft .links a:hover{color:#fff}
+.ft .cp{margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.45);display:flex;gap:16px;flex-wrap:wrap}
+
+/* responsive */
+@media(max-width:1080px){
+  h1{font-size:52px}.hg{grid-template-columns:1fr;gap:56px}.mock{max-width:640px;margin:0 auto;width:100%}
+  .win{transform:none}.mock:hover .win{transform:none}.fl.f1{left:-10px}.fl.f2{right:-6px}.fl.f3{right:-6px}
+  .sg{grid-template-columns:repeat(2,minmax(0,1fr))}.fg{grid-template-columns:repeat(2,minmax(0,1fr))}.fc.wide{grid-column:span 2}
+}
+@media(max-width:820px){
+  .nav{display:none}.hd .wrap{gap:12px;height:60px}
+  .hero{padding-top:100px}
+  h1{font-size:40px;min-height:2.1em}.lead{font-size:16px}
+  .ctas .btn{flex:1 1 100%}
+  section{padding:70px 0}.sh{margin-bottom:36px}.sh h2{font-size:30px}.sh p{font-size:15.5px}
+  .fg,.pg{grid-template-columns:minmax(0,1fr)}.fc.wide{grid-column:auto;grid-template-columns:minmax(0,1fr)}
+  .stg{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:34px}.stg:before{display:none}
+  .cbox{grid-template-columns:minmax(0,1fr);padding:34px 24px;border-radius:24px}.cbox h2{font-size:28px}
+  .wbody{grid-template-columns:minmax(0,1fr)}.wside{display:none}
+  .fl{font-size:11.5px;padding:8px 11px 8px 8px}.fl b{font-size:13.5px}.fl .ti{width:32px;height:32px}
+  .fl.f1{left:-4px;bottom:-34px}.fl.f2{right:-4px;top:-14px}.fl.f3{right:-4px;bottom:-34px}
+  .wrap{padding:0 16px}
+}
+@media(max-width:480px){.sg{grid-template-columns:minmax(0,1fr)}.stg{grid-template-columns:minmax(0,1fr)}.hd .lgtxt{display:none}.mt .hm{display:none}h1{font-size:36px}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style></head>
+<body>
+
+<header class="hd" id="hd"><div class="wrap">
+  <a class="logo" href="#top"><img src="logo-96.png" alt=""><span class="lgtxt">smart<b>bsb</b><i>.uz</i></span></a>
+  <nav class="nav"><a href="#imkoniyatlar">Imkoniyatlar</a><a href="#qanday">Qanday ishlaydi</a><a href="#bepul">Narx</a><a href="#savollar">Savollar</a></nav>
+  <span class="sp"></span>
+  <a class="btn glass sm" href="/natijalar.html">Natijalar jadvali</a>
+  <a class="btn y sm" href="kabinet.html">Kabinetga kirish</a>
+</div></header>
+
+<div class="hero" id="top">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="grain"></div>
+  <div class="wrap hg">
+    <div>
+      <span class="tag"><b>YANGI</b>Natijalar jadvali — eMaktab jurnalidan chorak bahosi</span>
+      <h1 aria-live="polite"><span class="ln"><span class="sw" id="w1">BSB hisoboti</span></span><span class="ln"><span class="u sw" id="w2">2 daqiqada</span></span></h1>
+      <p class="lead">O‘qituvchilar uchun BSB, CHSB va Diagnostika hisobotlarini avtomatik tayyorlaydigan sayt. Ballarni kiriting yoki eMaktab jurnalini tashlang — hisob-kitob, foizlar va PDF o‘zi tayyor.</p>
+      <div class="ctas">
+        <a class="btn y" href="kabinet.html?v=bsb">Bepul boshlash<span data-li="arrow-right"></span></a>
+        <a class="btn glass" href="https://www.youtube.com/@Smartbsbuz" target="_blank" rel="noopener noreferrer"><span data-li="circle-play"></span>Video qo‘llanma</a>
+      </div>
+      <div class="fine"><span><span data-li="circle-check"></span>Ro‘yxatdan o‘tmasdan</span><span><span data-li="circle-check"></span>5 ta fayl sovg‘a</span><span><span data-li="circle-check"></span>Telefonda ham</span></div>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="win">
+        <div class="wbar"><i></i><i></i><i></i><span>smartbsb.uz/kabinet</span></div>
+        <div class="wbody">
+          <div class="wside" id="mside"></div>
+          <div class="wmain">
+            <div class="wh"><span class="ti sm c-chsb" data-li="chart-column"></span><div><h4>CHSB hisoboti</h4><small>10-A · Informatika · 1-chorak</small></div><span class="pill">30 / 30 KIRITILDI</span></div>
+            <table class="mt" id="mtab"></table>
+          </div>
+        </div>
+      </div>
+      <div class="fl f1"><span class="ti sm c-dg" data-li="trending-up"></span><div><b>74%</b>o‘rtacha · avtomatik</div></div>
+      <div class="fl f2"><span class="ti sm c-cls" data-li="graduation-cap"></span><div><b>Sinflar saqlanadi</b>shu kompyuterda</div></div>
+      <div class="fl f3"><span class="ti sm c-xls" data-li="file-spreadsheet"></span><div><b>Excel tayyor</b>baholar va imzolar bilan</div></div>
+    </div>
+  </div>
+  <div class="hero-foot"></div>
+</div>
+
+<div class="strip"><div class="wrap sg">
+  <div class="si rv"><span class="ti c-bsb" data-li="users"></span><div><b>30 o‘quvchi bir ekranda</b><span>Sarlavha va jami doim ko‘rinadi</span></div></div>
+  <div class="si rv"><span class="ti c-xls" data-li="file-spreadsheet"></span><div><b>eMaktabdan yuklash</b><span>Ro‘yxat va ballar fayldan</span></div></div>
+  <div class="si rv"><span class="ti c-pdf" data-li="file-text"></span><div><b>PDF va Excel</b><span>Imzolar bilan, chop etishga tayyor</span></div></div>
+  <div class="si rv"><span class="ti c-cls" data-li="graduation-cap"></span><div><b>Sinflar saqlanadi</b><span>Shu kompyuterda, keyingi chorakka ham</span></div></div>
+</div></div>
+
+<section id="imkoniyatlar"><div class="wrap">
+  <div class="sh rv"><span class="mono">IMKONIYATLAR</span><h2>Hisobot uchun <span class="u">hammasi</span> bir joyda</h2><p>Har bir bo‘lim o‘qituvchining haqiqiy ishiga qarab qurilgan: kam bosish, kam yozish, xatosiz hisob.</p></div>
+  <div class="fg">
+    <div class="fc rv"><span class="ti c-bsb" data-li="clipboard-check"></span><h3>BSB hisoboti</h3><p>Savollar soni va ballarini belgilang, o‘quvchi ballarini kiriting — jami, foiz va o‘zlashtirish o‘zi chiqadi.</p><ul><li><span data-li="check"></span>4 qadam: ma’lumot, savollar, o‘quvchilar, ballar</li><li><span data-li="check"></span>PDF (jadval va tahlil), Excel</li></ul></div>
+    <div class="fc rv"><span class="ti c-chsb" data-li="chart-column"></span><h3>CHSB hisoboti</h3><p>Bilish, Qo‘llash va Mulohaza guruhlari alohida hisoblanadi. To‘g‘ri javobni bitta bosish bilan belgilang.</p><ul><li><span data-li="check"></span>Guruh jamilari va umumiy foiz</li><li><span data-li="check"></span>Belgilash yoki raqam bilan kiritish</li></ul></div>
+    <div class="fc rv"><span class="ti c-dg" data-li="activity"></span><h3>Diagnostika</h3><p>BSB-1, BSB-2 va CHSB natijalari bitta jadvalda. Har o‘quvchining o‘sishi yoki pasayishi ko‘rinib turadi.</p><ul><li><span data-li="check"></span>Saqlangan natijalar o‘zi tushadi</li><li><span data-li="check"></span>Ko‘pi bilan 6 ta ustun</li></ul></div>
+    <div class="fc wide rv"><div><span class="pill">YANGI</span><span class="ti c-nj" data-li="table-2"></span><h3>Natijalar jadvali</h3><p>eMaktab fan jurnalini tashlang: BSB, loyiha ishi, formativ baho va CHSB qo‘shilib, chorak bahosi o‘zi hisoblanadi. A’lochilar, yaxshilar va qoniqarlilar rang bilan ajratiladi.</p><ul><li><span data-li="check"></span>Tayyor Excel fayl</li><li><span data-li="check"></span>Telegram orqali kirib, obuna kodi bilan ishlaydi</li></ul></div>
+      <div class="nj-demo" id="njdemo"></div></div>
+    <div class="fc rv"><span class="ti c-cls" data-li="smartphone"></span><h3>Telefonda qulay</h3><p>Telefonda ballar har bir o‘quvchiga alohida kartada, katta tugmalar bilan qo‘yiladi. Darsdan keyin yo‘lda ham bo‘ladi.</p><ul><li><span data-li="check"></span>«Bittadan» kiritish rejimi</li><li><span data-li="check"></span>Pastki menyu bilan tez o‘tish</li></ul></div>
+  </div>
+</div></section>
+
+<section class="steps" id="qanday"><div class="wrap">
+  <div class="sh rv"><span class="mono">QANDAY ISHLAYDI</span><h2>To‘rt qadam — <span class="u">tayyor hisobot</span></h2><p>Maktab, fan va imzolar bir marta yoziladi va eslab qolinadi. Keyingi safar faqat ballarni kiritasiz.</p></div>
+  <div class="stg">
+    <div class="st rv"><div class="num"><span class="ti c-bsb" data-li="settings"></span><em>1</em></div><h3>Ma’lumotlar</h3><p>Sinf, fan, chorak. Oldingi hisobotdan o‘zi to‘ladi.</p></div>
+    <div class="st rv"><div class="num"><span class="ti c-chsb" data-li="hash"></span><em>2</em></div><h3>Savollar</h3><p>Savollar soni va har birining eng yuqori bali.</p></div>
+    <div class="st rv"><div class="num"><span class="ti c-cls" data-li="users"></span><em>3</em></div><h3>O‘quvchilar</h3><p>Saqlangan sinfni tanlang yoki eMaktab faylini tashlang.</p></div>
+    <div class="st rv"><div class="num"><span class="ti c-nj" data-li="download"></span><em>4</em></div><h3>Ballar va PDF</h3><p>Ballarni kiriting — natija va hujjat tayyor.</p></div>
+  </div>
+</div></section>
+
+<section id="bepul"><div class="wrap">
+  <div class="sh rv"><span class="mono">NARX</span><h2>Boshlash <span class="u">bepul</span></h2><p>Ball kiritish, hisoblash va natijani ko‘rish doim bepul. Token faqat faylni (PDF yoki Excel) yuklab olganda sarflanadi: 1 fayl = 1 token.</p></div>
+  <div class="pg">
+    <div class="pc rv"><h4>KIRMASDAN</h4><div class="big">0<small>so‘m</small></div><div class="sub">Ro‘yxatdan o‘tmasdan</div>
+      <ul><li><span data-li="check"></span>BSB, CHSB, Diagnostika</li><li><span data-li="check"></span>Ball kiritish va hisoblash</li><li><span data-li="check"></span>Sinflar shu kompyuterda saqlanadi</li><li class="no"><span data-li="x"></span>Fayl yuklab olish yo‘q</li></ul>
+      <a class="btn g" href="kabinet.html?v=bsb">Sinab ko‘rish</a></div>
+    <div class="pc best rv"><span class="rib">SOVG‘A</span><h4>TELEGRAM ORQALI KIRISH</h4><div class="big">5<small>ta fayl bepul</small></div><div class="sub">Parolsiz, bir tugma bilan</div>
+      <ul><li><span data-li="check"></span>Birinchi kirishda 5 ta token</li><li><span data-li="check"></span>BSB: Excel, PDF (jadval va tahlil)</li><li><span data-li="check"></span>CHSB: PDF tahlil</li><li><span data-li="check"></span>Diagnostika: PDF</li></ul>
+      <a class="btn y" href="kabinet.html?v=bsb">Bepul boshlash<span data-li="arrow-right"></span></a></div>
+    <div class="pc rv"><h4>TOKEN PAKETLARI</h4><div class="big">Kod<small>bilan</small></div><div class="sub">Kerakli hajmda sotib olasiz</div>
+      <ul><li><span data-li="check"></span>Telegramda yozasiz</li><li><span data-li="check"></span>To‘lovdan keyin kod olasiz</li><li><span data-li="check"></span>Kodni kabinetga kiritasiz</li><li><span data-li="check"></span>Tokenlar muddatsiz</li></ul>
+      <a class="btn g" href="https://t.me/volumes_analysis" target="_blank" rel="noopener noreferrer"><span data-tg></span>Telegramda yozish</a></div>
+  </div>
+  <p class="pnote rv">Natijalar jadvali — alohida obuna bilan. Paket narxlari Telegramda aytiladi.</p>
+</div></section>
+
+<section class="steps" id="savollar"><div class="wrap">
+  <div class="sh rv"><span class="mono">SAVOLLAR</span><h2>Ko‘p beriladigan <span class="u">savollar</span></h2></div>
+  <div class="fq">
+    <details class="rv"><summary>Ro‘yxatdan o‘tish shartmi?<span class="pm" data-li="plus"></span></summary><p>Ball kiritish va hisoblash uchun — yo‘q, BSB, CHSB va Diagnostika darhol ochiladi. Faylni yuklab olish uchun Telegram orqali kirasiz (parol kerak emas) va birinchi kirishda 5 ta token sovg‘a qilinadi.</p></details>
+    <details class="rv"><summary>Token nima va qachon sarflanadi?<span class="pm" data-li="plus"></span></summary><p>Token — fayl yuklab olish uchun birlik: har bir PDF yoki Excel 1 token. Ballarni kiritish, hisoblash va natijani ekranda ko‘rish tokensiz, bepul. Token tugasa, Telegramda yozasiz, to‘lovdan keyin kod olasiz va uni kabinetga kiritasiz.</p></details>
+    <details class="rv"><summary>eMaktab faylini qanday olaman?<span class="pm" data-li="plus"></span></summary><p>eMaktab tizimiga kiring, kerakli sinf va fanning jurnalini Excel (.xls yoki .xlsx) qilib yuklab oling va saytga tashlang. Ro‘yxat va mavjud ballar o‘zi olinadi.</p></details>
+    <details class="rv"><summary>Sinfdan o‘quvchi ketsa yoki yangisi kelsa-chi?<span class="pm" data-li="plus"></span></summary><p>O‘quvchilar qadamida ismni ✕ bilan olib tashlaysiz yoki yangi o‘quvchini qo‘shasiz. Adashib o‘chirsangiz, «Qaytarish» tugmasi bor.</p></details>
+    <details class="rv"><summary>O‘quvchilar ro‘yxatini kim ko‘radi?<span class="pm" data-li="plus"></span></summary><p>BSB, CHSB va Diagnostikadagi o‘quvchi ismlari va ballari faqat sizning brauzeringizda saqlanadi, serverga yuborilmaydi. Begona kompyuterda ishlagan bo‘lsangiz, kabinetdagi «Ma’lumotlarimni bu kompyuterdan o‘chirish» tugmasini bosing.</p></details>
+  </div>
+</div></section>
+
+<section class="cta" style="padding-top:96px"><div class="wrap"><div class="cbox rv">
+  <div><h2>Keyingi hisobotni <span class="u">2 daqiqada</span> tayyorlang</h2><p>Ball kiritish va hisoblash bepul, Telegram orqali kirganda 5 ta fayl sovg‘a. Sinflaringiz saqlanadi — keyingi safar faqat ballarni kiritasiz.</p></div>
+  <div class="ctas"><a class="btn y" href="kabinet.html?v=bsb">Bepul boshlash<span data-li="arrow-right"></span></a><a class="btn glass" href="/natijalar.html"><span data-li="table-2"></span>Natijalar jadvali</a></div>
+</div></div></section>
+
+<footer class="ft"><div class="wrap">
+  <div class="row">
+    <a class="logo" href="#top"><img src="logo-96.png" alt=""><span>smart<b>bsb</b><i>.uz</i></span></a>
+    <span class="sp"></span>
+    <div class="links"><a href="#imkoniyatlar">Imkoniyatlar</a><a href="#bepul">Narx</a><a href="#savollar">Savollar</a></div>
+    <div class="soc">
+      <a href="https://t.me/BSBCHSB_Hisobot" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg class="bl" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="bl-tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#37BBFE"/><stop offset="1" stop-color="#007DBB"/></linearGradient></defs><circle cx="24" cy="24" r="24" fill="url(#bl-tg)"/><path fill="#fff" d="M10.9 23.4c7-3 11.6-5 13.9-6 6.6-2.7 8-3.2 8.9-3.2.2 0 .6 0 .9.3.2.2.3.5.3.7v.9c-.4 4-1.9 13.7-2.7 18.2-.3 1.9-1 2.5-1.6 2.6-1.4.1-2.4-.9-3.8-1.8l-5.2-3.5c-2.3-1.5-.8-2.3.5-3.7.3-.4 6.4-5.9 6.5-6.4 0-.1 0-.3-.1-.4-.2-.1-.4-.1-.5 0-.2 0-3.6 2.3-10.3 6.8-1 .7-1.9 1-2.7 1-.9 0-2.6-.5-3.8-.9-1.5-.5-2.7-.8-2.6-1.6 0-.4.6-.9 1.7-1.3z"/></svg>Telegram</a>
+      <a href="https://www.instagram.com/smartbsb.uz/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="bl" viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="bl-ig" cx="13" cy="51" r="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFDD55"/><stop offset=".12" stop-color="#FFDD55"/><stop offset=".45" stop-color="#FF543E"/><stop offset=".75" stop-color="#C837AB"/><stop offset="1" stop-color="#6F3BD8"/></radialGradient></defs><rect width="48" height="48" rx="13" fill="url(#bl-ig)"/><rect x="11.5" y="11.5" width="25" height="25" rx="7.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="3"/><circle cx="31.4" cy="16.6" r="1.9" fill="#fff"/></svg>Instagram</a>
+      <a href="https://www.youtube.com/@Smartbsbuz" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="bl" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#fff"/><path fill="#FF0000" d="M41.2 16.1c-.4-1.5-1.6-2.7-3.1-3.1C35.4 12.3 24 12.3 24 12.3s-11.4 0-14.1.7c-1.5.4-2.7 1.6-3.1 3.1C6.1 18.8 6.1 24 6.1 24s0 5.2.7 7.9c.4 1.5 1.6 2.7 3.1 3.1 2.7.7 14.1.7 14.1.7s11.4 0 14.1-.7c1.5-.4 2.7-1.6 3.1-3.1.7-2.7.7-7.9.7-7.9s0-5.2-.7-7.9z"/><path fill="#fff" d="M20.4 29.1 29.8 24l-9.4-5.1z"/></svg>YouTube</a>
+    </div>
+  </div>
+  <div class="cp"><span>© 2026 smartbsb.uz</span><span>BSB, CHSB va Diagnostika hisobotlari</span></div>
+</div></footer>
+
+<script src="icons.js?v=4"></script>
+<script>
+const I=(k,sw)=>li(k,sw);
+/* telegram glyph from kit.js */
+document.querySelectorAll('[data-tg]').forEach(e=>e.insertAdjacentHTML('afterbegin',li('tg')));
+/* instagram not in Lucide set -> kit.js */
+document.querySelectorAll('[data-li="instagram"]').forEach(e=>{e.removeAttribute('data-li');e.innerHTML=li('ig')});
+/* mock sidebar + table */
+document.getElementById('mside').innerHTML=[['layout-dashboard','Bosh sahifa'],['users','Sinflarim'],['clipboard-check','BSB'],['chart-column','CHSB',1],['activity','Diagnostika'],['table-2','Natijalar']].map(n=>'<b class="'+(n[2]?'on':'')+'">'+I(n[0])+n[1]+'</b>').join('');
+(function(){const N=['Aliyev Sardorbek','Abdullayeva Malika','Bakirov Javohir','Valiyeva Nilufar','G‘aniyev Bobur','Davronova Sevinch','Ergashev Islom'];
+  const V=[[1,1,0,0,1,1,0,1,1],[1,1,1,1,0,1,0,1,0],[1,1,0,0,1,1,0,1,1],[0,1,1,1,1,0,1,1,0],[1,1,0,1,1,1,0,1,0],[1,1,0,1,1,1,1,0,0],[1,0,0,1,1,1,1,1,1]],P=[5,5,5,5,5,5,5,10,10];
+  const k=v=>'<span class="k'+(v?'':' x')+'">'+I(v?'check':'x',3)+'</span>';
+  let h='<tr><th></th><th colspan="4" style="color:#dc2626;background:#fff1f2">BILISH</th><th class="hm" style="background:#fff1f2"></th><th colspan="3" style="color:#d97706;background:#fff7e6">QO‘LLASH</th><th class="hm" style="background:#fff7e6"></th><th colspan="2" style="color:#059669;background:#ecfdf5">MULOHAZA</th><th class="hm" style="background:#ecfdf5"></th><th>FOIZ</th></tr>';
+  V.forEach((r,i)=>{const g=[r.slice(0,4),r.slice(4,7),r.slice(7)].map((a,gi)=>a.reduce((s,v,j)=>s+v*P[[0,4,7][gi]+j],0));const j=g[0]+g[1]+g[2],p=Math.round(j/55*100);
+    h+='<tr><td class="n">'+N[i]+'</td>'+r.slice(0,4).map(k).map(x=>'<td>'+x+'</td>').join('')+'<td class="gj hm" style="background:#fff1f2;color:#dc2626">'+g[0]+'</td>'+r.slice(4,7).map(k).map(x=>'<td>'+x+'</td>').join('')+'<td class="gj hm" style="background:#fff7e6;color:#d97706">'+g[1]+'</td>'+r.slice(7).map(k).map(x=>'<td>'+x+'</td>').join('')+'<td class="gj hm" style="background:#ecfdf5;color:#059669">'+g[2]+'</td><td><span class="bd" style="'+(p>=85?'background:#e8f7ee;color:#15803d':p>=60?'background:#fff7e0;color:#a16207':'background:#fff1f2;color:#e11d48')+'">'+p+'%</span></td></tr>'});
+  document.getElementById('mtab').innerHTML=h;
+  /* natijalar jadvali mini demo */
+  const R=[['Aliyev S.',88,5],['Abdullayeva M.',81,4],['Bakirov J.',73,4],['Valiyeva N.',69,3],['G‘aniyev B.',79,4]],C={5:['#dcfce7','#16a34a'],4:['#dbeafe','#2563eb'],3:['#fef9c3','#d97706']};
+  document.getElementById('njdemo').innerHTML='<div class="njt">'+R.map(r=>'<div style="background:'+C[r[2]][0]+'"><span>'+r[0]+'</span><b>'+r[1]+'</b><i style="background:'+C[r[2]][1]+'">'+r[2]+'</i></div>').join('')+'</div>';
+})();
+liFill();
+/* rotating headline */
+(function(){const W=[['BSB hisoboti','2 daqiqada'],['CHSB tahlili','bir zumda'],['Diagnostika','avtomatik'],['Chorak bahosi','o‘zi chiqadi']];
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const a=document.getElementById('w1'),b=document.getElementById('w2');let i=0;
+  setInterval(()=>{[a,b].forEach(e=>e.classList.add('out'));b.style.setProperty('--ux',0);
+    setTimeout(()=>{i=(i+1)%W.length;a.textContent=W[i][0];b.textContent=W[i][1];[a,b].forEach(e=>e.classList.remove('out'));setTimeout(()=>b.style.setProperty('--ux',1),180)},460)},3600);
+})();
+/* header + reveal */
+const hd=document.getElementById('hd');const onS=()=>hd.classList.toggle('solid',scrollY>30);addEventListener('scroll',onS,{passive:true});onS();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach((e,i)=>{e.style.transitionDelay=(i%4)*70+'ms';io.observe(e)});
+</script>
+<style>
+.njt{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.njt div{display:grid;grid-template-columns:minmax(0,1fr) 40px 26px;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:13.5px;font-weight:700}
+.njt b{text-align:right;font-weight:800}.njt i{font-style:normal;width:24px;height:24px;border-radius:8px;color:#fff;font-weight:900;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+</style>
+</body></html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>smartbsb statistika</title>
+<style>
+:root{--bg:#0b0b1f;--card:#14142e;--line:#26264a;--txt:#ecebff;--mut:#9d9bc7;--a:#8b5cf6;--b:#ec4899;--pdf:#f43f5e;--xl:#22c55e;--bsb:#7c6cff;--chsb:#38bdf8;--dg:#f59e0b}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,#2e1f78 0,transparent 60%),radial-gradient(900px 500px at 110% 0,#5b1647 0,transparent 55%),var(--bg);color:var(--txt);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.w{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+h1{margin:0;font-size:26px;letter-spacing:-.5px}
+h1 b{background:linear-gradient(90deg,#c4b5fd,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.mut{color:var(--mut);font-size:13px}
+button,input,select{font:inherit;color:var(--txt);background:#1c1c3c;border:1px solid var(--line);border-radius:10px;padding:9px 14px}
+button{cursor:pointer;background:linear-gradient(135deg,var(--a),var(--b));border:0;font-weight:700}
+button.g{background:#1c1c3c;border:1px solid var(--line);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.kp .card{padding:16px}
+.kp .n{font-size:32px;font-weight:800;letter-spacing:-1px;margin-top:4px}
+.kp .l{color:var(--mut);font-size:13px;font-weight:600}
+.row{display:grid;grid-template-columns:1fr 1.6fr;gap:14px;margin-bottom:14px}
+@media(max-width:800px){.row{grid-template-columns:1fr}}
+h2{margin:0 0 14px;font-size:16px}
+.bar{display:flex;align-items:center;gap:10px;margin:10px 0}
+.bar .nm{width:96px;font-weight:600}
+.bar .tr{flex:1;height:22px;background:#1c1c3c;border-radius:6px;overflow:hidden;display:flex}
+.bar .tr i{display:block;height:100%}
+.bar .v{width:52px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--mut)}
+.lg span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
+.ch{display:flex;align-items:flex-end;gap:3px;height:180px;padding-top:10px;border-bottom:1px solid var(--line)}
+.ch div{flex:1;min-width:4px;display:flex;flex-direction:column-reverse;position:relative;height:100%}
+.ch div i{display:block;width:100%}
+.ch div i:last-child{border-radius:3px 3px 0 0}
+.ch div:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#000;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;z-index:2}
+.ax{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:6px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;background:#24244a;font-size:12px;margin-right:4px}
+.lock{max-width:380px;margin:12vh auto 0;text-align:center}
+.lock input{width:100%;margin:14px 0 10px;text-align:center}
+.lock button{width:100%}
+.err{color:#fb7185;min-height:20px;margin-top:8px;font-size:14px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="w">
+  <div id="lock" class="card lock">
+    <h1><b>smartbsb</b> statistika</h1>
+    <p class="mut">Faqat sayt egasi uchun. Netlify'dagi STATS_KEY parolini kiriting.</p>
+    <input id="key" type="password" placeholder="Parol" autocomplete="current-password">
+    <button id="go">Kirish</button>
+    <div id="err" class="err"></div>
+  </div>
+
+  <div id="app" class="hide">
+    <div class="hd">
+      <div><h1><b>smartbsb.uz</b> statistika</h1><div class="mut" id="upd"></div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="per"><option value="7">7 kun</option><option value="30" selected>30 kun</option><option value="90">90 kun</option><option value="0">Hammasi</option></select>
+        <button class="g" id="rf">Yangilash</button><button class="g" id="out">Chiqish</button>
+      </div>
+    </div>
+
+    <div class="kp">
+      <div class="card"><div class="l">Jami yuklashlar</div><div class="n" id="kT">0</div></div>
+      <div class="card"><div class="l">PDF</div><div class="n" id="kP" style="color:var(--pdf)">0</div></div>
+      <div class="card"><div class="l">Excel</div><div class="n" id="kX" style="color:var(--xl)">0</div></div>
+      <div class="card"><div class="l">Bugun</div><div class="n" id="kD">0</div></div>
+      <div class="card"><div class="l">Foydalanuvchilar</div><div class="n" id="kU">0</div><div class="mut" id="kU2"></div></div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h2>Bo'limlar bo'yicha</h2>
+        <div id="modes"></div>
+        <div class="lg"><span style="--c:var(--pdf)">PDF</span><span style="--c:var(--xl)">Excel</span></div>
+        <h2 style="margin-top:22px">Turi bo'yicha</h2>
+        <div id="kinds"></div>
+      </div>
+      <div class="card">
+        <h2>Kunlik yuklashlar</h2>
+        <div class="ch" id="ch"></div>
+        <div class="ax"><span id="a0"></span><span id="a1"></span></div>
+        <div class="lg"><span style="--c:var(--bsb)">BSB</span><span style="--c:var(--chsb)">CHSB</span><span style="--c:var(--dg)">Diagnostika</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Foydalanuvchilar <span class="mut" id="uc"></span></h2>
+      <p class="mut" style="margin:-8px 0 12px">Bitta qurilma (brauzer) = bitta foydalanuvchi. Maktab nomi saytdagi «Maktab nomi» maydonidan olinadi.</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Maktab</th><th>Fanlar</th><th>Sinflar</th><th class="n">Jami</th><th class="n">PDF</th><th class="n">Excel</th><th class="n">BSB</th><th class="n">CHSB</th><th class="n">Diag.</th><th>Birinchi</th><th>Oxirgi</th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let DATA=null;
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtN=n=>(n||0).toLocaleString('ru-RU');
+const tday=()=>new Date(Date.now()+5*3600e3).toISOString().slice(0,10);
+const dshift=(d,k)=>{const x=new Date(d+'T00:00:00Z');x.setUTCDate(x.getUTCDate()+k);return x.toISOString().slice(0,10)};
+const dfmt=s=>s?new Date(s).toLocaleString('ru-RU',{timeZone:'Asia/Tashkent',day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+const top3=o=>Object.entries(o||{}).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k])=>`<span class="tag">${esc(k)}</span>`).join('');
+
+async function load(){
+  const key=$('key').value||ls.get('skey')||'';
+  if(!key){showLock('');return}
+  $('err').textContent='Yuklanmoqda...';
+  try{
+    const r=await fetch('/.netlify/functions/stats',{headers:{'x-key':key},cache:'no-store'});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===401){ls.set('skey',null);showLock("Parol noto'g'ri");return}
+    if(j.reason==='config'){showLock("Netlify'da STATS_KEY o'rnatilmagan");return}
+    if(!j.ok){showLock('Server xatosi. Birozdan keyin urinib ko‘ring');return}
+    ls.set('skey',key);DATA=j;$('lock').classList.add('hide');$('app').classList.remove('hide');render();
+  }catch(e){showLock('Aloqa xatosi')}
+}
+function showLock(msg){$('app').classList.add('hide');$('lock').classList.remove('hide');$('err').textContent=msg}
+
+function render(){
+  const per=+$('per').value,T=tday(),from=per?dshift(T,-(per-1)):'0000';
+  const days=DATA.days.filter(d=>d.key>=from);
+  const sum={},users=new Set();
+  days.forEach(d=>{for(const k in d)if(typeof d[k]==='number')sum[k]=(sum[k]||0)+d[k];Object.keys(d.devices||{}).forEach(u=>users.add(u))});
+  const td=DATA.days.find(d=>d.key===T)||{};
+  $('kT').textContent=fmtN(sum.total);$('kP').textContent=fmtN(sum.pdf);$('kX').textContent=fmtN(sum.excel);$('kD').textContent=fmtN(td.total);
+  $('kU').textContent=fmtN(users.size);$('kU2').textContent='bugun: '+Object.keys(td.devices||{}).length+' · jami: '+DATA.devices.length;
+  $('upd').textContent='Yangilandi: '+new Date().toLocaleTimeString('ru-RU')+(per?` · oxirgi ${per} kun`:' · butun davr');
+
+  const M=[['bsb','BSB'],['chsb','CHSB'],['dg','Diagnostika']];
+  const mx=Math.max(1,...M.map(([k])=>sum[k]||0));
+  $('modes').innerHTML=M.map(([k,n])=>{const p=(sum[k+'_pdf_jadval']||0)+(sum[k+'_pdf_tahlil']||0),x=(sum[k+'_excel_jadval']||0)+(sum[k+'_excel_tahlil']||0);
+    return `<div class="bar"><div class="nm">${n}</div><div class="tr"><i style="width:${p/mx*100}%;background:var(--pdf)"></i><i style="width:${x/mx*100}%;background:var(--xl)"></i></div><div class="v">${fmtN(sum[k])}</div></div>`}).join('');
+  const K=[['pdf_jadval','PDF (jadval)'],['pdf_tahlil','PDF (tahlil)'],['excel_jadval','Excel (jadval)'],['excel_tahlil','Excel (tahlil)']];
+  const kv=K.map(([k,n])=>[n,M.reduce((a,[m])=>a+(sum[m+'_'+k]||0),0),k.startsWith('pdf')?'var(--pdf)':'var(--xl)']);
+  const km=Math.max(1,...kv.map(v=>v[1]));
+  $('kinds').innerHTML=kv.map(([n,v,c])=>`<div class="bar"><div class="nm" style="width:120px">${n}</div><div class="tr"><i style="width:${v/km*100}%;background:${c}"></i></div><div class="v">${fmtN(v)}</div></div>`).join('');
+
+  const N=per||Math.max(7,Math.min(180,DATA.days.length?Math.round((Date.parse(T)-Date.parse(DATA.days[DATA.days.length-1].key))/864e5)+1:7));
+  const byDay=Object.fromEntries(DATA.days.map(d=>[d.key,d]));
+  const list=[...Array(N)].map((_,i)=>dshift(T,i-N+1));
+  const cm=Math.max(1,...list.map(d=>(byDay[d]||{}).total||0));
+  $('ch').innerHTML=list.map(d=>{const o=byDay[d]||{};const h=k=>((o[k]||0)/cm*100)+'%';
+    return `<div data-t="${d.slice(5)}: ${o.total||0} ta"><i style="height:${h('bsb')};background:var(--bsb)"></i><i style="height:${h('chsb')};background:var(--chsb)"></i><i style="height:${h('dg')};background:var(--dg)"></i></div>`}).join('');
+  $('a0').textContent=list[0];$('a1').textContent=list[list.length-1];
+
+  const us=DATA.devices.filter(u=>!per||(u.last||'').slice(0,10)>=from);
+  $('uc').textContent=`(${us.length})`;
+  $('tb').innerHTML=us.slice(0,500).map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.school)||'<span class="mut">—</span>'}</td><td>${top3(u.subs)}</td><td>${top3(u.classes)}</td><td class="n"><b>${fmtN(u.total)}</b></td><td class="n">${fmtN(u.pdf)}</td><td class="n">${fmtN(u.excel)}</td><td class="n">${fmtN(u.bsb)}</td><td class="n">${fmtN(u.chsb)}</td><td class="n">${fmtN(u.dg)}</td><td class="mut">${dfmt(u.first)}</td><td class="mut">${dfmt(u.last)}</td></tr>`).join('')||'<tr><td colspan="12" class="mut">Hali yuklashlar yo‘q</td></tr>';
+}
+$('go').onclick=load;$('key').onkeydown=e=>{if(e.key==='Enter')load()};
+$('rf').onclick=load;$('per').onchange=()=>DATA&&render();
+$('out').onclick=()=>{ls.set('skey',null);$('key').value='';showLock('')};
+if(ls.get('skey'))load();
+</script>
+</body>
+</html>
