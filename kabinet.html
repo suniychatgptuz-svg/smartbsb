@@ -897,7 +897,7 @@ let DL=webSave;
   fill('nbl',3);fill('nbr',7);
 })();
 /* Telegram guruh a'zoligini tekshirish (Netlify funksiyalari orqali) */
-const BOT='BSBCHSBUZ_bot';let gateRes=null,wIn=false;
+const BOT='smartbsbuzbot';let gateRes=null,wIn=false;
 const tgPost=async(fn,b)=>{const r=await fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});let j={};try{j=await r.json()}catch(e){}j.status=r.status;return j};
 function openGate(msg){
   $('gate').style.display='flex';$('gm').textContent=msg||'';
@@ -1536,7 +1536,7 @@ function setOne(i,val){const r=U.ci;
 
 
 /* ---------- Tokenlar: 1 yuklangan fayl = 1 token (balans serverda) ---------- */
-const FN='/.netlify/functions/',BOT='BSBCHSBUZ_bot',BUY='https://t.me/volumes_analysis';
+const FN='/.netlify/functions/',BOT='smartbsbuzbot',BUY='https://t.me/volumes_analysis';
 const TK={get:()=>{try{return localStorage.getItem('ntok')||''}catch(e){return''}},set:v=>{if(wiped)return;try{v?localStorage.setItem('ntok',v):localStorage.removeItem('ntok')}catch(e){}},bal:null,name:'',log:[]};
 const OY=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
 const uzD=iso=>{const d=new Date(Date.parse(iso)+5*3600e3);return d.getUTCDate()+'-'+OY[d.getUTCMonth()]+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')};

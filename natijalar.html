@@ -112,7 +112,7 @@ code.big{font-size:16px;color:#fff}
 <script>
 const $=id=>document.getElementById(id);
 const FN='/.netlify/functions/';
-const BOT='BSBCHSBUZ_bot';
+const BOT='smartbsbuzbot';
 const T={get:()=>{try{return localStorage.getItem('ntok')||''}catch(e){return''}},set:v=>{try{v?localStorage.setItem('ntok',v):localStorage.removeItem('ntok')}catch(e){}}};
 const OY=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
 const uzDate=iso=>{const d=new Date(Date.parse(iso)+5*3600e3);return d.getUTCDate()+'-'+OY[d.getUTCMonth()]+' '+d.getUTCFullYear()};
