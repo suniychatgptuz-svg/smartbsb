@@ -61,7 +61,10 @@ body{background:var(--bg)}
 .side>*{position:relative;z-index:1}
 .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19.5px;letter-spacing:-.035em;padding:2px 6px 16px;color:#fff}
 .logo img{width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.14),0 6px 16px -4px rgba(124,108,255,.8)}
-.logo b{color:var(--y);font-weight:900}.logo i{font-style:normal;color:rgba(255,255,255,.45);font-weight:700}
+.logo b{font-weight:900;color:var(--y);background:linear-gradient(100deg,#f59e0b 0%,#fde047 30%,#fffbe0 45%,#fde047 60%,#f59e0b 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(250,204,21,.45));animation:lgsh 5s ease-in-out infinite}
+@keyframes lgsh{0%,55%{background-position:100% 0}85%,100%{background-position:0 0}}
+.logo i{font-style:normal;color:#fff;font-weight:700;opacity:.92}
+.logo span,.logo>div{text-shadow:0 2px 12px rgba(124,108,255,.55)}.logo b{text-shadow:none}
 .logo small{display:block;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:9px;letter-spacing:.16em;color:rgba(255,255,255,.5);margin-top:1px}
 .nlabel{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:rgba(255,255,255,.4);padding:12px 10px 6px}
 .nav{display:flex;flex-direction:column;gap:2px}
@@ -70,10 +73,27 @@ body{background:var(--bg)}
 .nv:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
 .nv.on{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.09))!important;color:#fff!important;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
 .nv.on .lic{color:var(--y);opacity:1}
+a.nv{text-decoration:none;box-sizing:border-box}
+.nv[data-v="tok"]{color:#fff!important;font-weight:700;background:linear-gradient(90deg,rgba(253,224,71,.2),rgba(255,255,255,.05))!important;box-shadow:inset 0 0 0 1px rgba(253,224,71,.4)}
+.nv[data-v="tok"]:hover{background:linear-gradient(90deg,rgba(253,224,71,.3),rgba(255,255,255,.09))!important}
+.nv.on[data-v="tok"]{background:linear-gradient(90deg,rgba(253,224,71,.34),rgba(255,255,255,.12))!important;box-shadow:inset 0 0 0 1.5px rgba(253,224,71,.75)}
+.nv[data-v="tok"] .lic{color:var(--y);opacity:1;transform-origin:50% 50%;animation:zapfx 2.4s ease-in-out infinite}
+.nv[data-v="tok"] .lic svg{fill:rgba(253,224,71,.35)}
+@keyframes zapfx{0%,55%,100%{transform:none;filter:drop-shadow(0 0 0 rgba(253,224,71,0))}60%{transform:scale(1.35) rotate(-14deg);filter:drop-shadow(0 0 7px rgba(253,224,71,.95))}66%{transform:scale(1.05) rotate(8deg);filter:drop-shadow(0 0 2px rgba(253,224,71,.4))}72%{transform:scale(1.35) rotate(-6deg);filter:drop-shadow(0 0 8px rgba(253,224,71,1))}82%{transform:scale(1.1) rotate(0);filter:drop-shadow(0 0 3px rgba(253,224,71,.5))}}
+.nvyt .yti{width:22px;height:16px;margin:0 -2px;flex-shrink:0;filter:drop-shadow(0 3px 6px rgba(255,0,0,.4));transform-origin:50% 60%;animation:ytwig 3.2s ease-in-out infinite}
+@keyframes ytwig{0%,62%,100%{transform:none}68%{transform:scale(1.18) rotate(-8deg)}74%{transform:scale(1.18) rotate(7deg)}80%{transform:scale(1.12) rotate(-4deg)}86%{transform:scale(1.05) rotate(0)}}
+.nvyt:hover .yti{animation-duration:1.2s}
+.nvyt{color:#fff!important;font-weight:700;background:linear-gradient(90deg,rgba(255,0,0,.2),rgba(255,255,255,.05))!important;box-shadow:inset 0 0 0 1px rgba(255,90,90,.35)}
+.nvyt:hover{background:linear-gradient(90deg,rgba(255,0,0,.3),rgba(255,255,255,.09))!important}
+.nv .tag.q{display:grid;place-items:center;width:20px;height:20px;padding:0;border-radius:50%;font-family:inherit;font-size:13px;font-weight:900;letter-spacing:0;animation:qbob 1.6s ease-in-out infinite}
+@keyframes qbob{0%,100%{transform:translateY(0) rotate(0);box-shadow:0 0 0 0 rgba(253,224,71,.6)}30%{transform:translateY(-3px) rotate(-12deg)}60%{transform:translateY(0) rotate(10deg);box-shadow:0 0 0 7px rgba(253,224,71,0)}80%{transform:rotate(0)}}
 .nv .tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;letter-spacing:.12em;border-radius:99px;padding:2px 6px;background:var(--y);color:var(--deep)}
 .sfoot{margin-top:auto;border-radius:18px;padding:13px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14)}
 .sfoot .mono{color:rgba(255,255,255,.5);font-size:9px}
 .sfoot b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;margin:3px 0 10px}
+.cpill.cout .lic{color:#ef4444}.cpill.cout:hover{background:#fef2f2!important;border-color:#fecaca!important;color:#b91c1c}
+html.dark .cpill.cout:hover{background:rgba(248,113,113,.14)!important;border-color:rgba(248,113,113,.4)!important;color:#fecaca!important}
+@media(max-width:480px){.cpill.cout{padding:0 10px!important}.cpill.cout span:last-child{display:none}}
 .sdel{display:flex;align-items:center;gap:7px;margin-top:10px;padding:6px 8px!important;border-radius:9px;font-size:11.5px!important;font-weight:600;color:rgba(255,255,255,.55)!important;width:100%}
 .sdel:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}.sdel .lic svg{width:14px;height:14px}
 .main{min-width:0;display:flex;flex-direction:column}
@@ -119,7 +139,7 @@ body{background:var(--bg)}
 .btn.sm{height:32px;padding:0 11px!important;font-size:12.5px!important;border-radius:9px}
 .btn.ic-l{padding-left:4px!important}
 .btn .ti{box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
-.field label{display:block;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);margin-bottom:6px}
+.field label{display:block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:7px}
 .inp{display:block;width:100%;height:40px;border-radius:10px;background:var(--bg);border:1.5px solid var(--line);padding:0 12px;font-weight:700;font-size:14px;outline:0;color:var(--ink);transition:border-color .15s,box-shadow .15s,background .15s}
 select.inp{padding-right:6px;cursor:pointer}
 .inp:focus{border-color:var(--ind);background:#fff;box-shadow:0 0 0 4px rgba(79,70,229,.12)}
@@ -189,9 +209,16 @@ textarea.inp{height:auto;min-height:76px;padding:10px 12px;font-weight:600;font-
 .addst .inp{flex:1;min-width:0;background:#fff;font-weight:600}
 .addst .inp.bad{border-color:var(--bad);box-shadow:0 0 0 4px rgba(225,29,72,.12)}
 .rcol{display:flex;flex-direction:column;gap:10px}
-.drop{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;border:2px dashed #cfcdea;background:#faf9ff;cursor:pointer;transition:border-color .15s,background .15s}
-.drop:hover{border-color:var(--ind);background:#f3f1ff}
-.drop b{display:block;font-size:14px;font-weight:800}.drop small{font-size:12px;color:var(--gray);font-weight:600}
+.drop{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;border:2px dashed #22c55e;background:linear-gradient(100deg,rgba(34,197,94,.10),rgba(34,197,94,.03));cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;animation:dropglow 2.6s ease-in-out infinite}
+.drop:hover{border-color:#16a34a;background:rgba(34,197,94,.14);transform:translateY(-1px);box-shadow:0 8px 22px rgba(34,197,94,.22)}
+.drop{flex-wrap:wrap}.drop .dtx{flex:1;min-width:190px}
+.drop b{display:block;font-size:15px;font-weight:800}.drop small{font-size:12px;color:var(--gray);font-weight:600}
+.drop .ti{animation:dropbob 2.6s ease-in-out infinite}
+.drop .dbtn{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;padding:10px 16px;border-radius:12px;background:linear-gradient(180deg,#22c55e,#16a34a);color:#fff;font-size:13.5px;font-weight:800;box-shadow:0 4px 14px rgba(22,163,74,.35)}
+.drop .dbtn .lic svg{width:16px;height:16px}
+@keyframes dropglow{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}50%{box-shadow:0 0 0 5px rgba(34,197,94,.14)}}
+@keyframes dropbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:480px){.drop{flex-wrap:wrap}.drop .dbtn{width:100%;justify-content:center}}
 /* ballar jadvali (#tb, #dgt — eski kod chizadi) */
 .tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .seg{display:inline-flex;padding:3px;border-radius:11px;background:var(--bg);border:1.5px solid var(--line)}
@@ -425,8 +452,8 @@ html.dark .sum{background:#1f1b3d}
 html.dark .chip.on{background:#26224f!important}
 html.dark .names span:hover{background:#221e40}
 html.dark .addst .inp,html.dark .clsq .inp,html.dark .codein .inp{background:#120f28}
-html.dark .drop{background:#1a1735;border-color:#3a3570}
-html.dark .drop:hover{background:#221e40}
+html.dark .drop{background:linear-gradient(100deg,rgba(34,197,94,.13),rgba(34,197,94,.04));border-color:#22c55e}
+html.dark .drop:hover{background:rgba(34,197,94,.18)}
 html.dark .seg{background:#120f28}
 html.dark .seg button.on{background:var(--card)!important;color:#b9b5ff!important}
 html.dark .note.i{background:#1f1b3d;border-color:#332e63;color:#cfcbf7}
@@ -528,7 +555,7 @@ html.dark .oyn button.yes,html.dark .onum button.sel{background:var(--ind)!impor
       <span class="sp"></span>
       <button class="thm" type="button" id="thm" data-act="theme" aria-label="Rejim"></button>
       <button class="cpill tkp" type="button" data-v="tok" id="tkp" title="Tokenlar"></button>
-      <button class="cpill" type="button" data-v="cls" title="Sinflarim"><span class="lic" data-li="graduation-cap"></span><span id="tpcls">—</span></button>
+      <span id="tpcls" hidden>—</span><button class="cpill cout" type="button" data-act="exit" title="Kabinetdan chiqish"><span class="lic" data-li="log-out"></span><span>Chiqish</span></button>
     </header>
     <main class="content">
       <div id="view"></div>
@@ -578,7 +605,7 @@ html.dark .oyn button.yes,html.dark .onum button.sel{background:var(--ind)!impor
               <div class="addst"><input class="inp" id="newst" placeholder="Yangi o‘quvchi: familiya va ism" autocomplete="off" maxlength="80"><button class="btn soft" type="button" data-act="addst"><span class="lic" data-li="plus"></span>Qo‘shish</button></div>
               <div class="hint">Sinfdan ketgan o‘quvchini ✕ bilan olib tashlang. BSB, CHSB va Diagnostikaning ro‘yxati alohida saqlanadi.</div></div>
             <div class="rcol">
-              <label class="drop"><span class="ti l c-xls" data-li="file-spreadsheet"></span><span><b>Excel fayl tanlash</b><small>.xlsx, .xls yoki .csv — eMaktab jurnali</small></span><input id="file" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+              <label class="drop"><span class="ti l c-xls" data-li="file-spreadsheet"></span><span class="dtx"><b>Excel fayl tanlash</b><small>.xlsx, .xls yoki .csv — eMaktab jurnali</small></span><span class="dbtn"><span class="lic" data-li="upload"></span>Faylni tanlang</span><input id="file" type="file" accept=".xlsx,.xls,.csv" hidden></label>
               <div class="field"><label for="names">Yoki ro‘yxatni yozing / Excel ustunini nusxalab qo‘ying</label><textarea id="names" class="inp" rows="7" placeholder="Azizov Anvar&#10;Karimova Madina"></textarea></div>
               <button class="btn p" type="button" id="sv">Ro'yxatni saqlash</button>
               <div class="note i"><span class="lic" data-li="info"></span><div>Har qatorga bitta F.I.SH. Fan jurnali faylida BSB/CHSB ballari bo‘lsa, ular <b>Diagnostika</b> bo‘limiga o‘zi tushadi.</div></div>
@@ -1398,7 +1425,7 @@ function ui(){
   const v=U.view,W=WORK.includes(v),c=cl(),cn=clsName({modes:S.modes});
   if(W&&S.mode!==v){U.view=S.mode;return ui()}
   const nb=n=>'<button type="button" class="nv'+(v===n[0]?' on':'')+'" data-v="'+n[0]+'">'+ic(n[2])+n[1]+(n[3]?'<span class="tag">'+n[3]+'</span>':'')+'</button>';
-  document.getElementById('nav').innerHTML=NAV.map(nb).join('')+'<div class="nlabel">YORDAM</div>'+[['help','Qo‘llanma','book-open'],['sup','Yordam','info'],['set','Sozlamalar','settings']].map(nb).join('');
+  document.getElementById('nav').innerHTML=NAV.map(nb).join('')+'<div class="nlabel">YORDAM</div><a class="nv nvyt" href="'+YT+'" target="_blank" rel="noopener noreferrer" title="YouTube’da ochiladi"><svg class="yti" viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5.5" fill="#FF0000"/><path d="M11.2 5.6v8.8l7.6-4.4z" fill="#fff"/></svg>Video qo‘llanma<span class="tag q">?</span></a>'+[['help','Qo‘llanma','book-open'],['sup','Yordam','info'],['set','Sozlamalar','settings']].map(nb).join('');
   document.getElementById('bnav').innerHTML=[['home','Bosh sahifa','layout-dashboard'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['cls','Sinflar','users'],['menu','Menyu','menu']].map(b=>'<button type="button" class="'+(v===b[0]?'on':'')+'" data-v="'+b[0]+'">'+li(b[2])+'<span>'+b[1]+'</span></button>').join('');
   document.getElementById('ttl').textContent=TITLE[v][0];document.getElementById('crumb').textContent=TITLE[v][1];
   document.getElementById('tpcls').textContent=cn;document.getElementById('sfcls').textContent=cn;
@@ -1880,6 +1907,7 @@ document.addEventListener('click',e=>{
   else if(A==='tkclose')tkClose();
   else if(A==='redeem')redeem();
   else if(A==='logout')tkLogout();
+  else if(A==='exit'){const out=()=>{location.href='/?bosh=1'};if(TK.get())ask('Kabinetdan chiqilsinmi? Sinflaringiz va ballar shu kompyuterda qoladi.',()=>{TK.set('');out()});else out()}
   else if(A==='thsave')thSave(false);
   else if(A==='theme')setTheme(TH==='auto'?'light':TH==='light'?'dark':'auto');
   else if(A&&A.startsWith('th-'))setTheme(A.slice(3));
