@@ -1973,9 +1973,10 @@ function hbPages(sc){const W=842,H=595,MX=28,rowsAll=HB.rows.filter(r=>String(r.
   const page=sub=>{const cv=document.createElement('canvas');cv.width=W*sc;cv.height=H*sc;const ctx=cv.getContext('2d');ctx.scale(sc,sc);
     ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#000';ctx.textAlign='center';ctx.textBaseline='alphabetic';
     ctx.font='700 12.5px Arial, sans-serif';ctx.fillText(head,W/2,41);ctx.font='700 10.5px Arial, sans-serif';ctx.fillText(sub,W/2,62);pages.push(cv);return ctx};
-  const charts=(kind,lab,sub)=>{const cw=385,chh=233,gx=16,gy=17,top=79,L=[1,2,3,4].map(n=>lab+'-'+n);
-    for(let i=0;i<rowsAll.length;i+=4){const ctx=page(sub);
-      rowsAll.slice(i,i+4).forEach((r,k)=>hbChart(ctx,MX+(k%2)*(cw+gx),top+Math.floor(k/2)*(chh+gy),cw,chh,r.cls+' sinf ('+r.sub+')',L,r[kind]))}};
+  // diagramma betlariga faqat shu turda (BSB yoki CHSB) kamida bitta natijasi bor sinflar chiqadi
+  const charts=(kind,lab,sub)=>{const cw=385,chh=233,gx=16,gy=17,top=79,L=[1,2,3,4].map(n=>lab+'-'+n),list=rowsAll.filter(r=>r[kind].some(v=>v!=null));
+    for(let i=0;i<list.length;i+=4){const ctx=page(sub);
+      list.slice(i,i+4).forEach((r,k)=>hbChart(ctx,MX+(k%2)*(cw+gx),top+Math.floor(k/2)*(chh+gy),cw,chh,r.cls+' sinf ('+r.sub+')',L,r[kind]))}};
   charts('bsb','BSB',pre+'yilining BSB natijalari');
   const cols=['Sinf','Fan','BSB-1','BSB-2','BSB-3','BSB-4','CHSB-1','CHSB-2','CHSB-3','CHSB-4'];
   const wd=[45,86].concat(Array(8).fill((W-2*MX-131)/8)),xs=wd.map((_,i)=>MX+wd.slice(0,i).reduce((s,v)=>s+v,0)),rh=19.5,per=23;
