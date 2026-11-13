@@ -108,6 +108,11 @@ a.nv{text-decoration:none;box-sizing:border-box}
 @keyframes tgfly{0%,55%,100%{transform:translate(0,0) rotate(0)}70%{transform:translate(3px,-2px) rotate(-8deg)}85%{transform:translate(-1px,1px) rotate(2deg)}}
 @keyframes qbob{0%,100%{transform:translateY(0) rotate(0);box-shadow:0 0 0 0 rgba(253,224,71,.6)}30%{transform:translateY(-3px) rotate(-12deg)}60%{transform:translateY(0) rotate(10deg);box-shadow:0 0 0 7px rgba(253,224,71,0)}80%{transform:rotate(0)}}
 .nv .tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8.5px;letter-spacing:.12em;border-radius:99px;padding:2px 6px;background:var(--y);color:var(--deep)}
+/* «Tez kunda» (yopiq bo'lim): bir qatorda, nozik oltin ramka */
+.nv[data-v="hb"]{line-height:1.2}
+.nv[data-v="hb"] .tag{flex-shrink:0;white-space:nowrap;font-family:Inter,system-ui,sans-serif;font-size:9px;font-weight:700;letter-spacing:0;padding:2px 6px 2px 5px;margin-left:6px;background:rgba(253,224,71,.1);color:#fde68a;box-shadow:inset 0 0 0 1px rgba(253,224,71,.45);display:inline-flex;align-items:center;gap:3px}
+.nv[data-v="hb"] .tag:before{content:"";width:4px;height:4px;border-radius:50%;background:var(--y);box-shadow:0 0 6px rgba(253,224,71,.9);animation:soonp 1.8s ease-in-out infinite}
+@keyframes soonp{0%,100%{opacity:1}50%{opacity:.3}}
 .sfoot{margin-top:auto;border-radius:18px;padding:13px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14)}
 .sfoot .mono{color:rgba(255,255,255,.5);font-size:9px}
 .sfoot b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;margin:3px 0 10px}
@@ -1431,7 +1436,7 @@ function wipe(){ask("Bu kompyuterdagi barcha ma’lumotlaringiz (sinflar, o‘qu
   location.replace('/?bosh=1')})}
 
 /* ---------- menyu ---------- */
-const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent'],['hb','BSB va CHSB hisoboti','lock','TEZ KUNDA'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
+const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent'],['hb','BSB va CHSB hisoboti','lock','Tez kunda'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
 const TITLE={home:['Bosh sahifa','Kabinet'],cls:['Sinflarim','Shu kompyuterda saqlangan sinflar'],bsb:['BSB hisoboti','Bo‘lim bo‘yicha summativ baholash'],chsb:['CHSB hisoboti','Chorak summativ baholash'],dg:['Diagnostika','BSB va CHSB natijalari bitta jadvalda'],tok:['Profil va tokenlar','Balans, kod kiritish va tarix'],sf:['Sifat tahlili','3–4 sinf foizi bitta A4 hujjatda'],hb:['BSB va CHSB hisoboti','Yillik natijalar: diagrammalar va umumiy jadval'],set:['Sozlamalar','Maktab, imzolar va baho chegaralari'],help:['Qo‘llanma','Qisqa javoblar va video darsliklar'],sup:['Yordam','Muammolar va bog‘lanish']};
 const STEPS=['Ma’lumotlar','Savollar','O‘quvchilar','Ballar'];
 function go(v){
