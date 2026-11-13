@@ -1431,7 +1431,7 @@ function wipe(){ask("Bu kompyuterdagi barcha ma’lumotlaringiz (sinflar, o‘qu
   location.replace('/?bosh=1')})}
 
 /* ---------- menyu ---------- */
-const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent'],['hb','BSB va CHSB hisoboti','chart-no-axes-column','YANGI'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
+const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent'],['hb','BSB va CHSB hisoboti','lock','TEZ KUNDA'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
 const TITLE={home:['Bosh sahifa','Kabinet'],cls:['Sinflarim','Shu kompyuterda saqlangan sinflar'],bsb:['BSB hisoboti','Bo‘lim bo‘yicha summativ baholash'],chsb:['CHSB hisoboti','Chorak summativ baholash'],dg:['Diagnostika','BSB va CHSB natijalari bitta jadvalda'],tok:['Profil va tokenlar','Balans, kod kiritish va tarix'],sf:['Sifat tahlili','3–4 sinf foizi bitta A4 hujjatda'],hb:['BSB va CHSB hisoboti','Yillik natijalar: diagrammalar va umumiy jadval'],set:['Sozlamalar','Maktab, imzolar va baho chegaralari'],help:['Qo‘llanma','Qisqa javoblar va video darsliklar'],sup:['Yordam','Muammolar va bog‘lanish']};
 const STEPS=['Ma’lumotlar','Savollar','O‘quvchilar','Ballar'];
 function go(v){
@@ -1912,6 +1912,9 @@ document.addEventListener('input',e=>{const t=e.target;
    eMaktab «Fan jurnali» faylidan o'zi olinadi (foiz = sinfning o'rtacha bali / maksimal ball), qo'lda tuzatiladi.
    Ma'lumot brauzerda (kalit nj_hb — natijalar.html dagi shu bo'lim bilan umumiy). PDF: yotiq A4, 5 token. */
 const HBK='nj_hb';let HB=null,HBMSG=[];
+// Bo'lim hozircha yopiq («Tez kunda»): hisoblash usuli aniqlangach true qilinadi (foydalanuvchi qarori, 2026-11-13)
+const HB_OPEN=false;
+const hbLock=()=>'<div class="card pad lockv">'+tile('lock','c-chsb','l')+'<h3>BSB va CHSB hisoboti</h3><p>Yil davomidagi BSB va CHSB natijalari: har bir sinf va fan uchun diagramma hamda umumiy jadval — bitta PDF hujjatda. eMaktab jurnalidan o‘zi hisoblanadi.</p><span class="tkn" style="font-size:13px;padding:6px 14px">'+ic('clock')+'Tez kunda</span></div>';
 function hbLoad(){if(HB)return HB;let o=null;try{o=JSON.parse(localStorage.getItem(HBK))}catch(e){}
   HB=Object.assign({title:'',year:'',teacher:'',rows:[]},o||{});if(!Array.isArray(HB.rows))HB.rows=[];return HB}
 function hbSave(){try{localStorage.setItem(HBK,JSON.stringify(HB))}catch(e){}}
@@ -1945,7 +1948,7 @@ function hbParse(aoa,file){
   if(J.bsb==null&&J.chsb==null)throw new Error('BSB/CHSB ballari topilmadi');
   if(!J.cls||!J.sub)throw new Error('sinf yoki fan nomi topilmadi');
   return J}
-async function hbFiles(fl){hbLoad();HBMSG=[];
+async function hbFiles(fl){if(!HB_OPEN)return;hbLoad();HBMSG=[];
   for(const f of fl){try{
       const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
       const J=hbParse(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true}),f.name);
@@ -1998,7 +2001,7 @@ function hbPreview(){clearTimeout(hbT);hbT=setTimeout(()=>{const box=document.ge
   if(!has){box.innerHTML='<div class="hint" style="text-align:center;padding:26px 8px;margin:0">Jurnal faylini yuklang yoki jadvalga qator qo‘shing — hujjat ko‘rinishi shu yerda chiqadi.</div>';if(n)n.textContent='A4 · yotiq varaq';return}
   const pg=hbPages(1.1);if(n)n.textContent='A4 · yotiq varaq · '+pg.length+' bet';
   box.innerHTML=pg.map(c=>'<img alt="Hisobot beti" src="'+c.toDataURL('image/png')+'">').join('')},150)}
-function vHb(){const s=hbLoad();
+function vHb(){if(!HB_OPEN)return hbLock();const s=hbLoad();
   const cell=(i,k,v,ph)=>'<td><input class="inp" data-hbr="'+i+'" data-hbk="'+k+'" '+(/^[bc]\d$/.test(k)?'inputmode="decimal" maxlength="5"':'maxlength="40"')+' placeholder="'+(ph||'—')+'" value="'+hbA(v)+'"></td>';
   return '<div class="hello"><div><h2>BSB va CHSB <span class="u">hisoboti</span></h2><p>Yil davomidagi BSB va CHSB natijalari: har bir sinf va fan uchun diagramma hamda umumiy jadval — bitta PDF hujjatda.</p></div></div>'
   +'<div class="grid c21"><div style="display:flex;flex-direction:column;gap:16px;min-width:0">'
@@ -2019,7 +2022,7 @@ function vHb(){const s=hbLoad();
   +'<div class="card pad sfpvc"><div class="ch">'+tile('file-text','c-pdf','s')+'<div><h3>Ko‘rinishi</h3><small id="hbpn">A4 · yotiq varaq</small></div><span class="sp"></span><span class="tkn">'+ic('zap')+'5 token</span></div>'
    +'<div class="sfpv hbpv" id="hbpv"></div>'
    +'<button type="button" class="btn y w mt" data-act="hbpdf">'+ic('download')+'PDF yuklab olish · 5 token</button><div class="hint" style="text-align:center">Ko‘rish va tahrirlash bepul. Token faqat PDF yuklab olganda sarflanadi.</div></div></div>'}
-async function hbPdf(){hbLoad();
+async function hbPdf(){if(!HB_OPEN)return;hbLoad();
   if(!HB.rows.some(r=>(String(r.cls).trim()||String(r.sub).trim())&&r.bsb.concat(r.chsb).some(v=>v!=null))){toast('Avval jurnal yuklang yoki foizlarni yozing');return}
   if(!window.jspdf){toast('PDF kutubxonasi yuklanmadi');return}
   try{toast('PDF tayyorlanmoqda...');const pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
