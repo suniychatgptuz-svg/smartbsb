@@ -54,8 +54,8 @@ export async function login(id, p) {
 
 export const getAcct = async (id) => (await tk().get('acct/' + id, {type: 'json'})) || null;
 
-// Narx serverda belgilanadi: oddiy fayl 1 token, Sifat tahlili 5 token
-export const PRICE = {file: 1, sifat: 5};
+// Narx serverda belgilanadi: oddiy fayl 1 token, Sifat tahlili 5 token, BSB va CHSB hisoboti 5 token
+export const PRICE = {file: 1, sifat: 5, hisobot: 5};
 export const priceOf = (kind) => PRICE[kind] || PRICE.file;
 
 // Token sarflash. Yetmasa {ok:false, reason:'empty', need}

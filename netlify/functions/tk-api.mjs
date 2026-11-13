@@ -1,6 +1,6 @@
 // kabinet.html tokenlari. Kirish: tk-login (yoki nj-login) bergan belgi, "Authorization: Bearer ...".
 //   GET  ?part=me              -> {bal, name, log}
-//   POST ?part=spend  {what, kind} -> token sarflash (oddiy fayl 1, kind:'sifat' 5) — fayl yuklashdan oldin
+//   POST ?part=spend  {what, kind} -> token sarflash (oddiy fayl 1, kind:'sifat' yoki 'hisobot' 5) — fayl yuklashdan oldin
 //   POST ?part=redeem {code}   -> kodni faollashtirish
 import {readUser} from './lib/admin-auth.mjs';
 import {json} from './lib/counter.mjs';
@@ -21,7 +21,7 @@ export default async (req) => {
     if (req.method !== 'POST') return json({ok: false, reason: 'method'}, 405);
     const b = await req.json().catch(() => ({}));
     if (part === 'spend') {
-      const r = await spend(id, clip(b.what, 80), b.kind === 'sifat' ? 'sifat' : 'file');
+      const r = await spend(id, clip(b.what, 80), ['sifat', 'hisobot'].includes(b.kind) ? b.kind : 'file');
       return json(r, r.reason === 'auth' ? 401 : 200);
     }
     if (part === 'redeem') {

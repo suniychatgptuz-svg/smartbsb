@@ -2,7 +2,7 @@ BSB / CHSB sayti - joylash qisqacha:
 1) Bu papkadagi hamma narsani GitHub'dagi yangi repozitoriyga yuklang (index.html, netlify.toml va netlify papkasi).
 2) Netlify: Add new site -> Import from Git -> shu repozitoriyni tanlang. Boshqa hech narsani o'zgartirmang.
 3) Netlify: Site configuration -> Environment variables -> BOT_TOKEN nomi bilan BotFather bergan kalitni kiriting (Secret qilib belgilang). Keyin Deploys -> Trigger deploy.
-4) BotFather: /setdomain -> @BSBCHSBUZ_bot -> saytingiz manzili (masalan bsb-hisobot.netlify.app, https:// siz).
+4) BotFather: /setdomain -> @smartbsbuzbot -> saytingiz manzili (masalan bsb-hisobot.netlify.app, https:// siz).
 5) Botni https://t.me/BSBCHSB_Hisobot guruhida administrator qiling.
 BOT_TOKEN kalitini hech kimga yubormang va fayllarga yozmang.
 
@@ -131,3 +131,34 @@ Kabinet yuqori panelida rejim tugmasi: Avto → Yorug' → Qorong'i (bosilganda 
    Eski nom bilan saqlangan fan (masalan «Musiqa», «O'zbek tarix», «CHYoT») ro'yxatda o'zi qo'shilib ko'rinadi — ma'lumot yo'qolmaydi.
    Eski nomlar sahifa ochilganda o'zi yangilanadi: Musiqa → Musiqa madaniyati, O'zbek tarix → O'zbekiston tarixi,
    J:tarbiya → Jismoniy tarbiya, Davlat va huquq → … asoslari, Tadbirkorlik → … asoslari, CHYoT → CHQBT (barcha sinflarda va Sifat tahlilida).
+
+--- Admin panel yangi ko'rinishda (2026-11-13) ---
+admin.html kabinet uslubida: chap menyu (Tokenlar, Obunachilar, Statistika, Natijalar jadvali, Sifat tahlili),
+   yorug'/qorong'i rejim (kabinet bilan umumiy), telefonda menyu tepada. Belgilar icons.js dan.
+Tokenlar: asosiy yo'l endi to'g'ridan-to'g'ri berish — o'qituvchini qidirish (ism, @username, ID),
+   +10 / +20 / +50 / +100 tugmalari, «Boshqa» (istalgan son, minus bilan ayirish, izoh), «Tarix» (oxirgi amallar).
+   Har berishdan keyin 9 soniya «Bekor qilish» chiqadi. Kodlar qoldi («Kod orqali berish» — saytga hali kirmaganlar uchun).
+O'zgargan fayllar: admin.html, netlify/functions/admin-api.mjs (yangi ?part=tkacct), lib/admin-app.mjs
+   (smartbsb-admin-src/app.js dan qurilgan). Eski nusxalar: smartbsb-admin-src/*.bak-2026-11-12-dizayndan-oldin.
+Lokal sinov: launch.json "v2-admin" (port 5351, sinov paroli testkey, soxta xotira).
+
+--- Natijalar jadvali sahifasi yangi ko'rinishda (2026-11-13) ---
+natijalar.html ham kabinet uslubida (chap menyu: Natijalar jadvali, Kabinet, Rejim, Chiqish; yorug'/qorong'i). Uslub admin.html dagi bilan bir xil.
+   Kirish va obuna kodi oynasi yangilandi, ishlash tartibi o'zgarmadi. Menyuga keyin yangi bo'limlar qo'shiladi.
+   O'zgargan fayllar: natijalar.html, netlify/functions/lib/admin-app.mjs. Eski nusxa: smartbsb-admin-src/natijalar.html.bak-2026-11-13-dizayndan-oldin.
+
+--- BSB va CHSB hisoboti (2026-11-13, natijalar.html va admin) ---
+Yangi bo'lim (namuna-hisobot.pdf asosida): har bir sinf + fan uchun BSB-1..4 va CHSB-1..4 foizlari (chorak bo'yicha).
+   eMaktab «Fan jurnali» fayli tashlansa, sinf, fan, chorak va foiz o'zi olinadi. Foiz = sinfning o'rtacha bali / maksimal ball
+   (bir chorakda bir nechta BSB bo'lsa — ularning o'rtachasi). Kataklarni qo'lda tuzatish, qator qo'shish/o'chirish mumkin.
+   Ma'lumot brauzerda saqlanadi (kalit nj_hb) — keyingi chorakda faqat yangi jurnal qo'shiladi.
+   Natija: yotiq A4 PDF — BSB diagrammalari (betiga 4 ta), umumiy jadval, CHSB diagrammalari; o'qituvchi ismi yozilsa imzo qatori.
+   Obuna ichida (alohida token olinmaydi). natijalar.html ga jspdf kutubxonasi qo'shildi (SRI bilan).
+   O'zgargan fayllar: natijalar.html, netlify/functions/lib/admin-app.mjs.
+
+--- «BSB va CHSB hisoboti» kabinetga ham qo'shildi (2026-11-13) ---
+Kabinet menyusida Sifat tahlilidan keyin. Natijalar jadvali sahifasidagi bilan bir xil ishlaydi va ma'lumot umumiy (kalit nj_hb).
+   Kabinetda PDF = 5 token (Sifat tahlili kabi); Natijalar jadvali obunachilari uchun u sahifada bepul.
+   Narx serverda: lib/tokens.mjs PRICE.hisobot = 5. tk-api.mjs endi 'hisobot' turini ham qabul qiladi.
+   O'zgargan fayllar: kabinet.html (manba: smartbsb-v2-manba/k_head.html, k_tail.html -> python build.py),
+   netlify/functions/tk-api.mjs, netlify/functions/lib/tokens.mjs.

@@ -6,6 +6,7 @@
 //   POST ?part=release  {code}        -> kodni egasidan uzish (qolgan kunlar saqlanadi)
 //   POST ?part=revoke   {code}        -> kodni bekor qilish
 //   GET  ?part=tkcodes | tkaccts      -> token kodlari | o'qituvchilar balansi
+//   GET  ?part=tkacct&id=<telegramId> -> bitta o'qituvchi (token tarixi bilan)
 //   POST ?part=tkgen {n, count} · tkrevoke {code} · tkgive {id, n, why}
 import {APP} from './lib/admin-app.mjs';
 import {isAdmin} from './lib/admin-auth.mjs';
@@ -38,6 +39,11 @@ export default async (req) => {
   // tokenlar
   if (part === 'tkcodes') return json({ok: true, codes: await T.listCodes()});
   if (part === 'tkaccts') return json({ok: true, accts: await T.listAccts()});
+  if (part === 'tkacct') {
+    const id = String(new URL(req.url).searchParams.get('id') || '').replace(/[^0-9]/g, '');
+    const acct = id ? await T.getAcct(id) : null;
+    return acct ? json({ok: true, acct}) : json({ok: false, reason: 'not_found'});
+  }
   if (req.method === 'POST' && part === 'tkgen') {
     const n = Math.min(500, Math.max(1, Math.floor(+body.n || 0)));
     const count = Math.min(50, Math.max(1, Math.floor(+body.count || 1)));

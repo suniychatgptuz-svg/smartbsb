@@ -387,6 +387,8 @@ textarea.inp{height:auto;min-height:76px;padding:10px 12px;font-weight:600;font-
 .tbar>div{min-width:0}.tbar h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fg2{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
 .sfopt{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sft.hbt{border-spacing:4px 5px;margin:-5px -4px}.hbt td:first-child{width:auto}.hbt .inp{height:34px;font-size:13px;text-align:center;min-width:54px;padding:0 4px}.hbt td:first-child .inp{min-width:58px;font-weight:700}.hbt td:nth-child(2) .inp{text-align:left;min-width:128px;padding:0 9px}.hbt th{text-align:center;white-space:nowrap}
+.sfpv.hbpv{display:flex;flex-direction:column;gap:8px;max-height:68vh;overflow:auto}.sfpv.hbpv img{aspect-ratio:842/595}
 .chk{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13px;color:var(--mut);cursor:pointer}.chk input{width:16px;height:16px;accent-color:var(--ind)}
 .sftw{overflow-x:auto}
 .sft{border-collapse:separate;border-spacing:6px 6px;margin:-6px;min-width:100%}
@@ -1429,8 +1431,8 @@ function wipe(){ask("Bu kompyuterdagi barcha ma’lumotlaringiz (sinflar, o‘qu
   location.replace('/?bosh=1')})}
 
 /* ---------- menyu ---------- */
-const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent','YANGI'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
-const TITLE={home:['Bosh sahifa','Kabinet'],cls:['Sinflarim','Shu kompyuterda saqlangan sinflar'],bsb:['BSB hisoboti','Bo‘lim bo‘yicha summativ baholash'],chsb:['CHSB hisoboti','Chorak summativ baholash'],dg:['Diagnostika','BSB va CHSB natijalari bitta jadvalda'],tok:['Profil va tokenlar','Balans, kod kiritish va tarix'],sf:['Sifat tahlili','3–4 sinf foizi bitta A4 hujjatda'],set:['Sozlamalar','Maktab, imzolar va baho chegaralari'],help:['Qo‘llanma','Qisqa javoblar va video darsliklar'],sup:['Yordam','Muammolar va bog‘lanish']};
+const NAV=[['home','Bosh sahifa','layout-dashboard'],['cls','Sinflarim','users'],['bsb','BSB','clipboard-check'],['chsb','CHSB','chart-column'],['dg','Diagnostika','activity'],['sf','Sifat tahlili','percent'],['hb','BSB va CHSB hisoboti','chart-no-axes-column','YANGI'],['nj','Natijalar jadvali','table-2','YANGI'],['tok','Tokenlar','zap']];
+const TITLE={home:['Bosh sahifa','Kabinet'],cls:['Sinflarim','Shu kompyuterda saqlangan sinflar'],bsb:['BSB hisoboti','Bo‘lim bo‘yicha summativ baholash'],chsb:['CHSB hisoboti','Chorak summativ baholash'],dg:['Diagnostika','BSB va CHSB natijalari bitta jadvalda'],tok:['Profil va tokenlar','Balans, kod kiritish va tarix'],sf:['Sifat tahlili','3–4 sinf foizi bitta A4 hujjatda'],hb:['BSB va CHSB hisoboti','Yillik natijalar: diagrammalar va umumiy jadval'],set:['Sozlamalar','Maktab, imzolar va baho chegaralari'],help:['Qo‘llanma','Qisqa javoblar va video darsliklar'],sup:['Yordam','Muammolar va bog‘lanish']};
 const STEPS=['Ma’lumotlar','Savollar','O‘quvchilar','Ballar'];
 function go(v){
   if(v==='nj'){location.href='/natijalar.html';return}
@@ -1452,7 +1454,7 @@ function ui(){
   const work=document.getElementById('work'),view=document.getElementById('view');
   work.hidden=!W;view.hidden=W;
   tkChrome();
-  if(!W){view.innerHTML=v==='cls'?vCls(c):v==='tok'?vTok():v==='set'?vSet():v==='help'?vHelp():v==='sup'?vSup():v==='sf'?vSf():vHome(c);liFill();if(v==='sf')sfPreview();return}
+  if(!W){view.innerHTML=v==='cls'?vCls(c):v==='tok'?vTok():v==='set'?vSet():v==='help'?vHelp():v==='sup'?vSup():v==='sf'?vSf():v==='hb'?vHb():vHome(c);liFill();if(v==='sf')sfPreview();if(v==='hb')hbPreview();return}
   const st=v==='dg'?'dg':U.step[v];work.dataset.stage=st;work.classList.toggle('nar',st!==4&&st!=='dg');
   if(v!=='dg'){
     const s=U.step[v];
@@ -1610,7 +1612,7 @@ function tkLogout(){ask('Hisobdan chiqilsinmi? Sinflaringiz va ballar shu kompyu
 DL={save:async o=>{
   const no=()=>{const e=new Error('declined');e.code='declined';return e};
   if(!TK.get()){tkOpen('login');throw no()}
-  const kind=/^Sifat_tahlili/i.test(o.filename)?'sifat':'file';
+  const kind=/^Sifat_tahlili/i.test(o.filename)?'sifat':/^BSB_CHSB_hisobot/i.test(o.filename)?'hisobot':'file';
   let r;try{r=await tkApi('spend',{what:o.filename,kind})}catch(e){toast("Aloqa xatosi: internetni tekshirib qayta urinib ko'ring");throw no()}
   if(r.ok){tkSet(r);await webSave.save(o);setTimeout(()=>toast2('Fayl saqlandi · '+(+r.cost||1)+' token sarflandi, qoldi: <b>'+(+r.bal)+'</b>'),50);return}
   if(r.reason==='empty'){tkSet(r);tkOpen('empty',+r.need||1);throw no()}
@@ -1906,10 +1908,147 @@ document.addEventListener('input',e=>{const t=e.target;
   else if(t.classList.contains('mx')&&t.closest('#tb')){const g=document.querySelector('#mxg .mx[data-i="'+t.dataset.i+'"]');if(g)g.value=t.value}
   else if(t.classList.contains('onin')){const inp=document.querySelector('#tb input.sc[data-r="'+U.ci+'"][data-c="'+t.dataset.oi+'"]');if(inp){inp.value=t.value;inp.dispatchEvent(new Event('input',{bubbles:true}))}}
 });
+/* ---------- BSB va CHSB hisoboti (yillik): har sinf + fan uchun BSB-1..4 va CHSB-1..4 foizlari ----------
+   eMaktab «Fan jurnali» faylidan o'zi olinadi (foiz = sinfning o'rtacha bali / maksimal ball), qo'lda tuzatiladi.
+   Ma'lumot brauzerda (kalit nj_hb — natijalar.html dagi shu bo'lim bilan umumiy). PDF: yotiq A4, 5 token. */
+const HBK='nj_hb';let HB=null,HBMSG=[];
+function hbLoad(){if(HB)return HB;let o=null;try{o=JSON.parse(localStorage.getItem(HBK))}catch(e){}
+  HB=Object.assign({title:'',year:'',teacher:'',rows:[]},o||{});if(!Array.isArray(HB.rows))HB.rows=[];return HB}
+function hbSave(){try{localStorage.setItem(HBK,JSON.stringify(HB))}catch(e){}}
+const hbA=s=>esc(s==null?'':s).replace(/"/g,'&quot;');
+const hbNum=v=>{const n=parseFloat(String(v).replace(',','.').replace('%',''));return isFinite(n)&&n>=0&&n<=100?Math.round(n*10)/10:null};
+const hbRow=(cls,sub)=>({cls,sub,bsb:[null,null,null,null],chsb:[null,null,null,null]});
+const hbKey=(c,s)=>(String(c).trim()+'|'+String(s).trim()).toLowerCase();
+function hbSort(){HB.rows.sort((a,b)=>(parseInt(a.cls,10)||0)-(parseInt(b.cls,10)||0)||String(a.cls).localeCompare(String(b.cls))||String(a.sub).localeCompare(String(b.sub)))}
+// eMaktab «Fan jurnali» -> {cls, sub, year, teacher, q, bsb, chsb}
+function hbParse(aoa,file){
+  const num=v=>typeof v==='number'?v:typeof v==='string'&&/^\s*\d+([.,]\d+)?\s*$/.test(v)?parseFloat(v.replace(',','.')):null;
+  const J={cls:'',sub:'',year:'',teacher:''};
+  for(const r of aoa.slice(0,8)){const c=String(r[0]||'');let m;
+    if((m=c.match(/Sinf:\s*(\S+)\s+(\d{4})\s*\/\s*(\d{4})/))){J.cls=m[1];J.year=m[2]+'-'+m[3]}
+    if((m=c.match(/^Fan:\s*(.+)/)))J.sub=m[1].trim();
+    if((m=c.match(/FIO:\s*(.+)/))){const w=m[1].trim().split(/\s+/).filter(Boolean);
+      if(w.length>1){const cap=s=>s.charAt(0).toUpperCase()+s.slice(1).toLowerCase();J.teacher=w[0][0].toUpperCase()+'. '+cap(w[w.length-1])}}}
+  const hr=aoa.findIndex(r=>r.some(c=>String(c).trim()==='FB'));
+  if(hr<0)throw new Error("eMaktab jurnal fayliga o'xshamaydi (FB ustuni topilmadi)");
+  const H=aoa[hr].map(c=>String(c).trim()),T=(aoa[hr+1]||[]).map(c=>String(c).trim()),MX=aoa[hr+2]||[];
+  const fbC=H.indexOf('FB'),finC=H.findIndex((c,j)=>j>fbC&&/chorak|yarim/i.test(c));
+  J.q=finC>=0?Math.min(4,Math.max(1,parseInt(H[finC],10)||1)):0;
+  if(!J.q)throw new Error('chorak aniqlanmadi');
+  const cols=[];T.forEach((t,j)=>{if(j>=fbC)return;const kind=/^(CHSB|ChSB|ЧСБ)/i.test(t)?'chsb':/^(BSB|БСБ)/i.test(t)?'bsb':null;if(kind&&num(MX[j])!=null)cols.push({j,kind,max:num(MX[j])})});
+  // bir nechta BSB bo'lib, oxirgisining maksimal bali boshqacha bo'lsa — bu Loyiha/Laboratoriya (hisobga olinmaydi)
+  const bs=cols.filter(c=>c.kind==='bsb');if(bs.length>=2&&bs[bs.length-1].max!==bs[0].max)bs[bs.length-1].kind='loyiha';
+  const rows=[];for(let i=hr+3;i<aoa.length;i++){const r=aoa[i];if(num(r[0])==null||!String(r[1]||'').trim())continue;rows.push(r)}
+  const pct=kind=>{const a=[];cols.forEach(c=>{if(c.kind!==kind||!c.max)return;const v=rows.map(r=>num(r[c.j])).filter(x=>x!=null);if(v.length)a.push(v.reduce((s,x)=>s+x,0)/v.length/c.max*100)});
+    return a.length?Math.round(a.reduce((s,x)=>s+x,0)/a.length*10)/10:null};
+  J.bsb=pct('bsb');J.chsb=pct('chsb');
+  if(J.bsb==null&&J.chsb==null)throw new Error('BSB/CHSB ballari topilmadi');
+  if(!J.cls||!J.sub)throw new Error('sinf yoki fan nomi topilmadi');
+  return J}
+async function hbFiles(fl){hbLoad();HBMSG=[];
+  for(const f of fl){try{
+      const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
+      const J=hbParse(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true}),f.name);
+      let r=HB.rows.find(x=>hbKey(x.cls,x.sub)===hbKey(J.cls,J.sub));if(!r){r=hbRow(J.cls,J.sub);HB.rows.push(r)}
+      if(J.bsb!=null)r.bsb[J.q-1]=J.bsb;if(J.chsb!=null)r.chsb[J.q-1]=J.chsb;
+      if(!HB.year&&J.year)HB.year=J.year;if(!HB.teacher&&J.teacher)HB.teacher=J.teacher;
+      HBMSG.push([1,J.cls+' · '+J.sub+' · '+J.q+'-chorak: '+[J.bsb!=null?'BSB '+J.bsb+'%':'',J.chsb!=null?'CHSB '+J.chsb+'%':''].filter(Boolean).join(', ')])
+    }catch(e){HBMSG.push([0,f.name+': '+(e&&e.message||'o‘qib bo‘lmadi')])}}
+  hbSort();hbSave();ui()}
+function hbChart(ctx,x,y,w,h,title,labels,vals){ctx.save();
+  ctx.fillStyle='#fff';ctx.fillRect(x,y,w,h);ctx.strokeStyle='#d4d4d4';ctx.lineWidth=.8;ctx.strokeRect(x,y,w,h);
+  ctx.fillStyle='#111';ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.font='700 11.5px "Times New Roman", Times, serif';ctx.fillText(title,x+w/2,y+18);
+  const L=x+40,R=x+w-10,T=y+30,B=y+h-30,Y=v=>B-v/100*(B-T);
+  ctx.font='8px Arial, sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let v=0;v<=100;v+=10){ctx.strokeStyle=v?'#e3e3e3':'#555';ctx.lineWidth=v?.6:.9;ctx.beginPath();ctx.moveTo(L,Y(v));ctx.lineTo(R,Y(v));ctx.stroke();ctx.fillStyle='#333';ctx.fillText(v+'%',L-8,Y(v))}
+  const sw=(R-L)/labels.length,bw=sw*.32;
+  labels.forEach((lb,i)=>{const cx=L+sw*(i+.5),v=vals[i];
+    if(v!=null){ctx.fillStyle='#7fb055';ctx.fillRect(cx-bw/2,Y(v),bw,B-Y(v));ctx.strokeStyle='#5c8f3a';ctx.lineWidth=.8;ctx.strokeRect(cx-bw/2,Y(v),bw,B-Y(v));
+      ctx.fillStyle='#111';ctx.font='700 8.5px Arial, sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(String(v),cx,Y(v)-3)}
+    ctx.fillStyle='#111';ctx.font='700 8px Arial, sans-serif';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(lb,cx,B+7)});
+  ctx.restore()}
+// Hisobot betlari (yotiq A4: 842 x 595 birlik)
+function hbPages(sc){const W=842,H=595,MX=28,rowsAll=HB.rows.filter(r=>String(r.cls).trim()||String(r.sub).trim());
+  const head=HB.title||S.school||'',pre=HB.year?HB.year+" o'quv ":"O'quv ",pages=[];
+  const page=sub=>{const cv=document.createElement('canvas');cv.width=W*sc;cv.height=H*sc;const ctx=cv.getContext('2d');ctx.scale(sc,sc);
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#000';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    ctx.font='700 12.5px Arial, sans-serif';ctx.fillText(head,W/2,41);ctx.font='700 10.5px Arial, sans-serif';ctx.fillText(sub,W/2,62);pages.push(cv);return ctx};
+  const charts=(kind,lab,sub)=>{const cw=385,chh=233,gx=16,gy=17,top=79,L=[1,2,3,4].map(n=>lab+'-'+n);
+    for(let i=0;i<rowsAll.length;i+=4){const ctx=page(sub);
+      rowsAll.slice(i,i+4).forEach((r,k)=>hbChart(ctx,MX+(k%2)*(cw+gx),top+Math.floor(k/2)*(chh+gy),cw,chh,r.cls+' sinf ('+r.sub+')',L,r[kind]))}};
+  charts('bsb','BSB',pre+'yilining BSB natijalari');
+  const cols=['Sinf','Fan','BSB-1','BSB-2','BSB-3','BSB-4','CHSB-1','CHSB-2','CHSB-3','CHSB-4'];
+  const wd=[45,86].concat(Array(8).fill((W-2*MX-131)/8)),xs=wd.map((_,i)=>MX+wd.slice(0,i).reduce((s,v)=>s+v,0)),rh=19.5,per=23;
+  for(let i=0;i<Math.max(1,rowsAll.length);i+=per){const ctx=page(pre+'yilining BSB va CHSB natijalari jadvali');let y=79;
+    const cell=(c,t,bg,bold,left)=>{ctx.fillStyle=bg;ctx.fillRect(xs[c],y,wd[c],rh);ctx.strokeStyle='#bdbdbd';ctx.lineWidth=.7;ctx.strokeRect(xs[c],y,wd[c],rh);
+      ctx.fillStyle='#111';ctx.font=(bold?'700 ':'')+'8px Arial, sans-serif';ctx.textBaseline='middle';ctx.textAlign=left?'left':'center';ctx.fillText(t,left?xs[c]+5:xs[c]+wd[c]/2,y+rh/2+.5)};
+    cols.forEach((t,c)=>cell(c,t,'#f7d674',true));y+=rh;
+    rowsAll.slice(i,i+per).forEach((r,k)=>{const bg=k%2?'#fff':'#fdf6e6';cell(0,r.cls,'#ffff66',true);cell(1,r.sub,bg,false,true);
+      r.bsb.concat(r.chsb).forEach((v,j)=>cell(2+j,v==null?'':String(v),bg));y+=rh});
+    if(HB.teacher&&i+per>=rowsAll.length){y+=34;ctx.fillStyle='#111';ctx.textAlign='left';ctx.textBaseline='alphabetic';
+      ctx.font='9.5px Arial, sans-serif';ctx.fillText('Fan o‘qituvchisi:',MX,y);ctx.font='700 9.5px Arial, sans-serif';ctx.fillText(HB.teacher,MX+78,y);
+      ctx.fillText('Imzo:',W-MX-190,y);ctx.fillStyle='#555';ctx.fillRect(W-MX-158,y+2,150,.8)}}
+  charts('chsb','CHSB',pre+'yilidagi choraklik CHSB natijalari');
+  return pages}
+let hbT=null;
+function hbPreview(){clearTimeout(hbT);hbT=setTimeout(()=>{const box=document.getElementById('hbpv');if(!box)return;
+  const has=HB.rows.some(r=>String(r.cls).trim()||String(r.sub).trim());
+  const n=document.getElementById('hbpn');
+  if(!has){box.innerHTML='<div class="hint" style="text-align:center;padding:26px 8px;margin:0">Jurnal faylini yuklang yoki jadvalga qator qo‘shing — hujjat ko‘rinishi shu yerda chiqadi.</div>';if(n)n.textContent='A4 · yotiq varaq';return}
+  const pg=hbPages(1.1);if(n)n.textContent='A4 · yotiq varaq · '+pg.length+' bet';
+  box.innerHTML=pg.map(c=>'<img alt="Hisobot beti" src="'+c.toDataURL('image/png')+'">').join('')},150)}
+function vHb(){const s=hbLoad();
+  const cell=(i,k,v,ph)=>'<td><input class="inp" data-hbr="'+i+'" data-hbk="'+k+'" '+(/^[bc]\d$/.test(k)?'inputmode="decimal" maxlength="5"':'maxlength="40"')+' placeholder="'+(ph||'—')+'" value="'+hbA(v)+'"></td>';
+  return '<div class="hello"><div><h2>BSB va CHSB <span class="u">hisoboti</span></h2><p>Yil davomidagi BSB va CHSB natijalari: har bir sinf va fan uchun diagramma hamda umumiy jadval — bitta PDF hujjatda.</p></div></div>'
+  +'<div class="grid c21"><div style="display:flex;flex-direction:column;gap:16px;min-width:0">'
+  +'<div class="card pad"><div class="ch">'+tile('upload','c-xls','s')+'<div><h3>Jurnaldan olish</h3><small>eMaktab «Fan jurnali» fayli — har bir sinf va chorak uchun alohida</small></div></div>'
+   +'<label class="drop" id="hbdrop"><span class="ti l c-xls">'+li('file-spreadsheet',2.2)+'</span><span class="dtx"><b>Jurnal fayllarini tanlash</b><small>.xls yoki .xlsx — bir nechtasini birdan tanlash mumkin</small></span><span class="dbtn">'+ic('upload')+'Faylni tanlang</span><input id="hbfi" type="file" accept=".xls,.xlsx" multiple hidden></label>'
+   +(HBMSG.length?'<div class="mt" style="display:flex;flex-direction:column;gap:6px">'+HBMSG.map(m=>'<div class="note '+(m[0]?'i':'w')+'"><span class="lic">'+li(m[0]?'circle-check':'circle-alert')+'</span><div>'+esc(m[1])+'</div></div>').join('')+'</div>':'')
+   +'<div class="hint">Sinf, fan, chorak va foiz fayldan o‘zi olinadi. Foiz — sinfning o‘rtacha bali maksimal ballga nisbatan. 1-chorak jurnali BSB-1 va CHSB-1 ga, 2-chorak BSB-2 va CHSB-2 ga tushadi.</div></div>'
+  +'<div class="card pad"><div class="ch">'+tile('settings','c-bsb','s')+'<div><h3>Ma’lumotlar</h3><small>Hujjat sarlavhasi va imzo</small></div></div>'
+   +'<div class="field"><label>Sarlavha (maktab nomi)</label><input class="inp" data-hb="title" maxlength="110" placeholder="'+hbA(S.school||'5-umumiy o‘rta ta’lim maktabi o‘qituvchilari')+'" value="'+hbA(s.title)+'"></div>'
+   +'<div class="fg2 mt"><div class="field"><label>O‘quv yili</label><input class="inp" data-hb="year" maxlength="12" placeholder="2025-2026" value="'+hbA(s.year)+'"></div>'
+   +'<div class="field"><label>Fan o‘qituvchisi (ixtiyoriy)</label><input class="inp" data-hb="teacher" maxlength="60" placeholder="Imzo qatori uchun" value="'+hbA(s.teacher)+'"></div></div></div>'
+  +'<div class="card pad"><div class="ch">'+tile('percent','c-dg','s')+'<div><h3>Natijalar (foizda)</h3><small>Istalgan katakni qo‘lda yozish yoki tuzatish mumkin (0–100)</small></div></div>'
+   +'<div class="sftw"><table class="sft hbt"><thead><tr><th>Sinf</th><th>Fan</th>'+[1,2,3,4].map(n=>'<th>BSB-'+n+'</th>').join('')+[1,2,3,4].map(n=>'<th>CHSB-'+n+'</th>').join('')+'<th></th></tr></thead><tbody>'
+   +(s.rows.map((r,i)=>'<tr>'+cell(i,'cls',r.cls,'5-A')+cell(i,'sub',r.sub,'Fan')+r.bsb.map((v,j)=>cell(i,'b'+j,v)).join('')+r.chsb.map((v,j)=>cell(i,'c'+j,v)).join('')+'<td><button type="button" class="sfx" data-hbd="'+i+'" title="Qatorni o‘chirish">'+li('x',2.6)+'</button></td></tr>').join('')||'<tr><td colspan="11"><div class="hint" style="margin:6px 2px">Hali ma’lumot yo‘q.</div></td></tr>')
+   +'</tbody></table></div>'
+   +'<div class="row3"><button type="button" class="btn soft sm" data-act="hbadd">'+ic('plus')+'Qator qo‘shish</button>'+(s.rows.length?'<button type="button" class="btn g sm" data-act="hbclr">'+ic('trash-2')+'Hammasini tozalash</button>':'')+'</div></div>'
+  +'</div>'
+  +'<div class="card pad sfpvc"><div class="ch">'+tile('file-text','c-pdf','s')+'<div><h3>Ko‘rinishi</h3><small id="hbpn">A4 · yotiq varaq</small></div><span class="sp"></span><span class="tkn">'+ic('zap')+'5 token</span></div>'
+   +'<div class="sfpv hbpv" id="hbpv"></div>'
+   +'<button type="button" class="btn y w mt" data-act="hbpdf">'+ic('download')+'PDF yuklab olish · 5 token</button><div class="hint" style="text-align:center">Ko‘rish va tahrirlash bepul. Token faqat PDF yuklab olganda sarflanadi.</div></div></div>'}
+async function hbPdf(){hbLoad();
+  if(!HB.rows.some(r=>(String(r.cls).trim()||String(r.sub).trim())&&r.bsb.concat(r.chsb).some(v=>v!=null))){toast('Avval jurnal yuklang yoki foizlarni yozing');return}
+  if(!window.jspdf){toast('PDF kutubxonasi yuklanmadi');return}
+  try{toast('PDF tayyorlanmoqda...');const pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+    hbPages(2.5).forEach((cv,i)=>{if(i)pdf.addPage();pdf.addImage(cv.toDataURL('image/jpeg',.93),'JPEG',0,0,297,210)});
+    const name=('BSB_CHSB_hisobot_'+(HB.year||'yil')+'.pdf').replace(/[\\\/:*?"<>|\s]+/g,'_');
+    await DL.save({filename:name,data:new Uint8Array(pdf.output('arraybuffer'))})}
+  catch(e){if(!e||e.code!=='declined')toast("PDF yaratib bo'lmadi")}}
+document.addEventListener('input',e=>{const t=e.target;if(U.view!=='hb')return;const s=hbLoad();
+  if(t.dataset.hb){s[t.dataset.hb]=t.value.trim()}
+  else if(t.dataset.hbr!=null){const r=s.rows[+t.dataset.hbr],k=t.dataset.hbk;if(!r)return;
+    if(k==='cls'||k==='sub')r[k]=t.value.trim();
+    else{const raw=t.value.trim(),n=raw===''?null:hbNum(raw);t.style.borderColor=raw!==''&&n==null?'var(--bad)':'';(k[0]==='b'?r.bsb:r.chsb)[+k[1]]=n}}
+  else return;
+  hbSave();hbPreview()});
+document.addEventListener('change',e=>{if(e.target.id==='hbfi'){const fl=[...e.target.files];e.target.value='';if(fl.length)hbFiles(fl)}});
+document.addEventListener('dragover',e=>{if(e.target.closest&&e.target.closest('#hbdrop'))e.preventDefault()});
+document.addEventListener('drop',e=>{if(e.target.closest&&e.target.closest('#hbdrop')){e.preventDefault();const fl=[...e.dataTransfer.files];if(fl.length)hbFiles(fl)}});
+function hbAct(t){const s=hbLoad();
+  if(t.dataset.hbd!=null){s.rows.splice(+t.dataset.hbd,1);hbSave();ui();return true}
+  const A=t.dataset.act;
+  if(A==='hbadd'){s.rows.push(hbRow('',''));hbSave();ui();const ins=document.querySelectorAll('[data-hbk="cls"]');if(ins.length)ins[ins.length-1].focus();return true}
+  if(A==='hbclr'){if(confirm('Jadvaldagi barcha natijalar o‘chiriladi. Davom etilsinmi?')){s.rows=[];HBMSG=[];hbSave();ui()}return true}
+  if(A==='hbpdf'){hbPdf();return true}
+  return false}
+
 document.addEventListener('click',e=>{
   if(e.target.id==='scrim'){document.body.classList.remove('drawer');return}
   if(e.target.id==='tkm'){tkClose();return}
-  const t=e.target.closest('[data-v],[data-st],[data-act],[data-cid],[data-delc],[data-rm],[data-om],[data-ci],[data-one],[data-sfc],[data-sfdc],[data-sfdr]');if(!t)return;
+  const t=e.target.closest('[data-v],[data-st],[data-act],[data-cid],[data-delc],[data-rm],[data-om],[data-ci],[data-one],[data-sfc],[data-sfdc],[data-sfdr],[data-hbd]');if(!t)return;
+  if(U.view==='hb'&&!t.dataset.v&&hbAct(t))return;
   if(U.view==='sf'&&!t.dataset.v&&sfAct(t))return;
   if(t.dataset.v){go(t.dataset.v);return}
   if(t.dataset.st){if(!WORK.includes(U.view)||U.view==='dg')return;U.step[U.view]=+t.dataset.st;saveU();ui();window.scrollTo(0,0);return}
