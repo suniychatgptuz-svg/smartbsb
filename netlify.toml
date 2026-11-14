@@ -15,12 +15,11 @@
   status = 404
   force = true
 
-# Xavfsizlik sarlavhalari (2026-11-12): begona skript, yashirin joylashtirish va boshqa hujumlardan himoya
+# Xavfsizlik sarlavhalari (2026-11-12; 2026-11-15: faqat web.telegram.org ichida ochilishiga ruxsat — bot Mini App uchun): begona skript, yashirin joylashtirish va boshqa hujumlardan himoya
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://telegram.org https://*.telegram.org https://t.me; frame-src https://oauth.telegram.org; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
-    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://telegram.org https://*.telegram.org https://t.me; frame-src https://oauth.telegram.org; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://web.telegram.org; upgrade-insecure-requests"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"

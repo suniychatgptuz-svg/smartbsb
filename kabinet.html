@@ -1566,6 +1566,10 @@ function setOne(i,val){const r=U.ci;
 /* ---------- Tokenlar: 1 yuklangan fayl = 1 token (balans serverda) ---------- */
 const FN='/.netlify/functions/',BOT='smartbsbuzbot',BUY='https://t.me/volumes_analysis';
 const TK={get:()=>{try{return localStorage.getItem('ntok')||''}catch(e){return''}},set:v=>{if(wiped)return;try{v?localStorage.setItem('ntok',v):localStorage.removeItem('ntok')}catch(e){}},bal:null,name:'',log:[]};
+/* Telegram Mini App: faqat bot ichida ochilganda ishlaydi. Oddiy brauzerda TGA.on=false — hech narsa o'zgarmaydi. */
+/* ikki shart: manzilda Telegram ma'lumoti BOR va sahifa haqiqatan Telegram ilovasi ichida (telefon/kompyuter ilovasi yoki web.telegram.org oynasi) */
+const TGA={on:/[#&?]tgWebAppData=/.test(location.hash+location.search)&&(!!window.TelegramWebviewProxy||window.parent!==window),w:null,last:null};
+const tgaData=()=>TGA.w&&TGA.w.initData||'';
 const OY=['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
 const uzD=iso=>{const d=new Date(Date.parse(iso)+5*3600e3);return d.getUTCDate()+'-'+OY[d.getUTCMonth()]+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')};
 async function tkApi(part,body){const o={headers:{Authorization:'Bearer '+TK.get()},cache:'no-store'};
@@ -1586,6 +1590,7 @@ function tkChrome(){const inn=!!TK.get(),b=TK.bal==null&&TK.err?'—':TK.bal;
 const tkm=document.getElementById('tkm'),tkb=document.getElementById('tkb');
 const okBtn='<div class="row"><button class="btn p" type="button" data-act="tkclose">Yaxshi</button></div>';
 function tkOpen(k,extra){
+  if(k==='login'&&tgaData()){tkLogin(tgaData(),1);return}
   const warn='<div class="note w"><span class="lic">'+li('shield-check')+'</span><div>Telegram so‘rovida <b>smartbsb.uz</b> yozilganini tekshiring. Biz hech qachon SMS kod, parol yoki QR kod so‘ramaymiz.</div></div>';
   const codeBox='<div class="codein"><input class="inp" id="codein" placeholder="TK-XXXX-XXXX" maxlength="14" autocomplete="off" spellcheck="false"><button class="btn p" type="button" data-act="redeem">Faollashtirish</button></div><div class="hint" id="codemsg">&nbsp;</div>';
   const H={
@@ -1606,8 +1611,8 @@ async function redeem(){const i=document.getElementById('codein'),m=document.get
   if(r.ok){tkSet(r);if(U.view==='tok')ui();tkOpen('msg',tile('circle-check','c-dg','l')+'<h3>+'+(+r.added)+' token qo‘shildi</h3><p>Balansingiz: <b>'+(+r.bal)+' token</b>.</p>'+okBtn);return}
   if(r.reason==='auth'){tkOpen('login');return}
   m.innerHTML='<span class="bad">'+({bad_code:'Bunday kod topilmadi. Kodni tekshirib qayta yozing.',taken:'Bu kod allaqachon ishlatilgan.',used_self:'Bu kodni siz avval ishlatgansiz.',limit:'Juda ko‘p noto‘g‘ri urinish. 1 soatdan keyin qayta urinib ko‘ring.'}[r.reason]||'Faollashtirib bo‘lmadi. Birozdan keyin urinib ko‘ring.')+'</span>'}
-async function tkLogin(u){tkOpen('msg','<h3>Kirilmoqda...</h3><p>Telegram tasdig‘i tekshirilmoqda.</p>');
-  try{const r=await fetch(FN+'tk-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:u})});const j=await r.json().catch(()=>({}));
+async function tkLogin(u,app){tkOpen('msg','<h3>Kirilmoqda...</h3><p>Telegram tasdig‘i tekshirilmoqda.</p>');
+  try{const r=await fetch(FN+'tk-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(app?{initData:u}:{user:u})});const j=await r.json().catch(()=>({}));
     if(!j.ok){tkOpen('msg','<h3>Kirib bo‘lmadi</h3><p>Telegram tasdig‘i o‘tmadi. Qayta urinib ko‘ring.</p><div class="row"><button class="btn g" type="button" data-act="tkclose">Yopish</button><button class="btn y" type="button" data-act="login">Qayta urinish</button></div>');return}
     TK.set(j.token);tkSet(j);ui();
     if(j.gift)tkOpen('gift',j.gift);else tkOpen('msg',tile('circle-check','c-dg','l')+'<h3>Kirdingiz</h3><p>Balansingiz: <b>'+(+j.bal)+' token</b>.</p>'+okBtn)}
@@ -1619,10 +1624,22 @@ DL={save:async o=>{
   if(!TK.get()){tkOpen('login');throw no()}
   const kind=/^Sifat_tahlili/i.test(o.filename)?'sifat':/^BSB_CHSB_hisobot/i.test(o.filename)?'hisobot':'file';
   let r;try{r=await tkApi('spend',{what:o.filename,kind})}catch(e){toast("Aloqa xatosi: internetni tekshirib qayta urinib ko'ring");throw no()}
-  if(r.ok){tkSet(r);await webSave.save(o);setTimeout(()=>toast2('Fayl saqlandi · '+(+r.cost||1)+' token sarflandi, qoldi: <b>'+(+r.bal)+'</b>'),50);return}
+  if(r.ok){tkSet(r);if(TGA.w){TGA.last={o,r};tgSend();return}await webSave.save(o);setTimeout(()=>toast2('Fayl saqlandi · '+(+r.cost||1)+' token sarflandi, qoldi: <b>'+(+r.bal)+'</b>'),50);return}
   if(r.reason==='empty'){tkSet(r);tkOpen('empty',+r.need||1);throw no()}
   if(r.reason==='auth'){tkOpen('login');throw no()}
   toast("Server hozir javob bermayapti. Birozdan keyin urinib ko'ring");throw no()}};
+/* bot ichida: blob yuklab olish Telegram ilovasida ishlamaydi -> fayl bot orqali o'qituvchining o'z chatiga yuboriladi */
+async function tgSend(){const L=TGA.last;if(!L)return;const o=L.o,r=L.r;
+  tkOpen('msg','<h3>Yuborilmoqda...</h3><p>Fayl Telegram chatingizga yuborilmoqda.</p>');
+  const u8=o.data instanceof Uint8Array?o.data:new Uint8Array(o.data);let bin='';
+  for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
+  let j;try{j=await tkApi('send',{name:o.filename,data:btoa(bin)})}catch(e){j={}}
+  if(j.ok){TGA.last=null;try{track(o.filename)}catch(e){}
+    tkOpen('msg',tile('circle-check','c-dg','l')+'<h3>Fayl chatga yuborildi</h3><p><b>'+esc(o.filename)+'</b> bot bilan chatingizda turibdi. '+(+r.cost||1)+' token sarflandi, qoldi: <b>'+(+r.bal)+'</b>.</p>'+okBtn);return}
+  if(j.reason==='auth')return;
+  const big=j.reason==='size';
+  const why=j.reason==='blocked'?'Bot sizga yoza olmadi: botda <b>Start</b> tugmasini bosing, keyin qayta yuboring.':big?'Fayl Telegram orqali yuborish uchun juda katta.':'Yuborib bo‘lmadi. Internetni tekshirib qayta urinib ko‘ring.';
+  tkOpen('msg','<h3>Fayl yuborilmadi</h3><p>'+why+' Token qayta olinmaydi.</p><div class="row"><button class="btn g" type="button" data-act="tgdl">Shu yerda saqlash</button>'+(big?'':'<button class="btn y" type="button" data-act="tgresend">Qayta yuborish</button>')+'</div>')}
 function vTok(){
   if(!TK.get())return '<div class="card pad lockv">'+tile('zap','c-nj','l')+'<h3>Tokenlar</h3><p>Ball kiritish, hisoblash va natijani ko‘rish bepul. Har bir yuklangan fayl (PDF yoki Excel) — 1 token, Sifat tahlili — 5 token. Telegram orqali kirsangiz, <b>5 ta token sovg‘a</b> qilinadi.</p><button class="btn y" type="button" data-act="login">'+ic('tg')+'Telegram orqali kirish</button></div>';
   return '<div class="grid c21"><div class="bal"><div class="mono" style="color:rgba(255,255,255,.6)">BALANS'+(TK.name?' · '+esc(TK.name).toUpperCase():'')+'</div><div class="big">'+(TK.bal==null?(TK.err?'—':'…'):TK.bal)+'<small>token</small></div><p>1 token = 1 ta yuklangan fayl (PDF yoki Excel). Sifat tahlili — 5 token. Ball kiritish, hisoblash va natijani ko‘rish bepul.</p><div class="row2"><a class="btn y" href="'+BUY+'" target="_blank" rel="noopener noreferrer">'+ic('tg')+'Token sotib olish</a><button class="btn glass" type="button" data-act="logout">'+ic('log-out')+'Chiqish</button></div></div>'
@@ -2076,6 +2093,8 @@ document.addEventListener('click',e=>{
   else if(A==='tkclose')tkClose();
   else if(A==='redeem')redeem();
   else if(A==='logout')tkLogout();
+  else if(A==='tgresend')tgSend();
+  else if(A==='tgdl'){const L=TGA.last;tkClose();if(L)webSave.save(L.o)}
   else if(A==='exit'){const out=()=>{location.href='/?bosh=1'};if(TK.get())ask('Kabinetdan chiqilsinmi? Sinflaringiz va ballar shu kompyuterda qoladi.',()=>{TK.set('');out()});else out()}
   else if(A==='thsave')thSave(false);
   else if(A==='theme')setTheme(TH==='auto'?'light':TH==='light'?'dark':'auto');
@@ -2106,7 +2125,16 @@ render();
 (function(){const q=new URLSearchParams(location.search);
   if(q.get('hash')&&q.get('id')){const u={};['id','first_name','last_name','username','photo_url','auth_date','hash'].forEach(k=>{if(q.has(k))u[k]=q.get(k)});
     history.replaceState(null,'',location.pathname);tkLogin(u);return}
-  if(TK.get())tkApi('me').then(j=>{TK.err=!(j&&j.bal!=null)&&j.reason!=='auth';tkSet(j)}).catch(()=>{TK.err=true;tkChrome()});
+  const me=()=>{if(TK.get())tkApi('me').then(j=>{TK.err=!(j&&j.bal!=null)&&j.reason!=='auth';tkSet(j)}).catch(()=>{TK.err=true;tkChrome()})};
+  if(!TGA.on)return me();
+  /* bot ichida: Telegram skripti yuklanadi, o'qituvchi o'z Telegram hisobi bilan avtomatik kiradi */
+  const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';
+  sc.onload=()=>{const w=window.Telegram&&Telegram.WebApp;
+    if(w&&w.initData){TGA.w=w;document.documentElement.classList.add('tga');
+      try{w.ready();w.expand()}catch(e){}try{w.disableVerticalSwipes&&w.disableVerticalSwipes()}catch(e){}
+      if(!TK.get())return tkLogin(w.initData,1)}
+    me()};
+  sc.onerror=me;document.head.appendChild(sc);
 })();
 })();
 </script></body></html>

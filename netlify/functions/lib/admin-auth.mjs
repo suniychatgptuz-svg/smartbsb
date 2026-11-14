@@ -29,6 +29,28 @@ export function checkTelegram(u) {
   return Date.now() / 1000 - Number(u.auth_date) < 86400;
 }
 
+// Telegram Mini App (bot ichida ochilgan sayt): initData imzosini tekshiradi.
+// To'g'ri bo'lsa Telegram foydalanuvchisini ({id, first_name, ...}) qaytaradi, aks holda null.
+export function checkWebApp(initData) {
+  if (typeof initData !== 'string' || !initData || initData.length > 4096 || !BOT()) return null;
+  const q = new URLSearchParams(initData);
+  const hash = q.get('hash');
+  if (!hash) return null;
+  q.delete('hash');
+  const str = [...q.entries()].sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0)).map(([k, v]) => k + '=' + v).join('\n');
+  const secret = crypto.createHmac('sha256', 'WebAppData').update(BOT()).digest();
+  const a = Buffer.from(crypto.createHmac('sha256', secret).update(str).digest('hex'));
+  const b = Buffer.from(String(hash));
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  if (!(Date.now() / 1000 - Number(q.get('auth_date')) < 86400)) return null;
+  try {
+    const u = JSON.parse(q.get('user') || 'null');
+    return u && u.id ? u : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // O'qituvchi belgisi (token), 30 kun amal qiladi
 const key = () => crypto.createHmac('sha256', 'smartbsb-user-v1').update(BOT()).digest();
 export function signUser(id) {
